@@ -1,0 +1,13 @@
+.ConfirmOrCancel {
+    display: flex;
+    justify-content: center;
+}
+
+.Cancel {
+padding: 0 50px;
+
+}
+
+.Confirm {
+
+}

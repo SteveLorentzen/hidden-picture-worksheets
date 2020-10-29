@@ -1,0 +1,21 @@
+.QuestionAnswer {
+    display: flex;
+    height: 40px;
+    justify-content: space-between;
+    margin: 5px;
+}
+
+.QuestionInput {
+    width: 45%;
+    height: 25px;
+}
+
+.Question {
+    width: 45%;
+    margin: 7px auto 0 auto;
+}
+
+.Answer {
+    width: 45%;
+    height: 25px;
+}

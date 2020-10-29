@@ -1,0 +1,35 @@
+.WorksheetContainer {
+    display: flex;
+    justify-content: center;
+
+}
+
+.PictureContainer {
+    width: 500px;
+    height: 500px;
+    border: 1px solid black;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.QuestionAnswerContainer {
+    width: 30%;
+    height: 500px;
+    border: 1px solid black;
+    box-sizing: border-box;
+    overflow-y: scroll;
+}
+
+.ShowPanel {
+    z-index: 40;
+    border: 1px solid black;
+    box-sizing: border-box;
+    background-color: red;
+}
+
+.HidePanel {
+    z-index: -50;
+    box-sizing: border-box;
+    background-color: red
+}
