@@ -1,12 +1,18 @@
 .WorksheetContainer {
     display: flex;
+    flex-wrap: wrap-reverse;
     justify-content: center;
-
+    align-items: center;
+    margin: auto;
 }
 
 .PictureContainer {
-    width: 500px;
-    height: 500px;
+    width: 50vw;
+    height: 50vw;
+    max-width: 500px;
+    max-height: 500px;
+    min-width: 400px;
+    min-height: 400px;
     border: 1px solid black;
     box-sizing: border-box;
     display: flex;
@@ -14,8 +20,11 @@
 }
 
 .QuestionAnswerContainer {
-    width: 30%;
-    height: 500px;
+    width: 50vw;
+    height: 50vw;
+    max-width: 500px;
+    max-height: 500px;
+    min-width: 400px;   
     border: 1px solid black;
     box-sizing: border-box;
     overflow-y: scroll;
@@ -33,3 +42,4 @@
     box-sizing: border-box;
     background-color: red
 }
+

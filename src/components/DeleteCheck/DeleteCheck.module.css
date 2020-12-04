@@ -1,11 +1,12 @@
 .ConfirmOrCancel {
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .Cancel {
 padding: 0 50px;
-
+color: red;
 }
 
 .Confirm {

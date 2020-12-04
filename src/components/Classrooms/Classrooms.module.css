@@ -1,0 +1,35 @@
+.NewClassroomBox {
+  text-align: center;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.ClassroomsBox {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: auto;
+  padding: 0 25px;
+  border: 1px solid black;
+  background-color: rgb(241, 249, 252);
+  height: 125px;
+}
+
+.SpinnerBox {
+  text-align: center;
+  padding: 10px;
+  height: 25px;
+}
+
+.CodeBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.Code {
+  font-size: 4rem;
+  font-weight: bolder;
+}

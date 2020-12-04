@@ -1,26 +1,29 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
-import { BrowserRouter } from 'react-router-dom';
-import { Auth0Provider } from '@auth0/auth0-react'
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import * as serviceWorker from "./serviceWorker";
+import { BrowserRouter } from "react-router-dom";
+import { Auth0Provider } from "@auth0/auth0-react";
+import { ThemeProvider, CSSReset } from "@chakra-ui/core";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Auth0Provider
-      domain='dev-c67jht6b.us.auth0.com'
-      clientId='kGGfbKH7lYxT8ylBrCL6rc1nFc6KgARo'
-      redirectUri='http://localhost:3000/worksheets'
-      audience='http://hiddenpictureAPI.com'
-    >
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </Auth0Provider>
-
-  </React.StrictMode >,
-  document.getElementById('root')
+    <ThemeProvider>
+      <CSSReset />
+      <Auth0Provider
+        domain="dev-c67jht6b.us.auth0.com"
+        clientId="kGGfbKH7lYxT8ylBrCL6rc1nFc6KgARo"
+        redirectUri="http://localhost:3000"
+        audience="http://hiddenpictureAPI.com"
+      >
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </Auth0Provider>
+    </ThemeProvider>
+  </React.StrictMode>,
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change

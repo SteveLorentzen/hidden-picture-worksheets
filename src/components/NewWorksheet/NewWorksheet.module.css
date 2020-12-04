@@ -1,30 +1,51 @@
 .NewWorksheet {
-    width: 70%;
-    margin: auto;
-    border: 1px solid black;
-    height: 75%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-    padding: 20px;
-    min-height: 300px;
+  width: 70%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  min-height: 300px;
+  box-sizing: border-box;
+  background-color: grey;
 }
 
 .InputContainer {
-    width: 80%;
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  width: 100%;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px;
 }
 
 .mainImageContainer {
-    width: 80%;
-    border: 1px solid black;
-    padding: 10px;
+  margin: auto;
+  width: 90%;
+  border: 1px solid grey;
+  box-shadow: 1px 2px 4px #888888;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5px;
 }
 
 .Title {
-    height: 5%;
+  color: teal;
+  margin: 20px auto -10px auto;
+}
+
+.Label {
+  width: 150px;
+  min-width: 150px;
+  color: teal;
+  font-weight: bold;
+}
+
+.ButtonBox {
+  display: flex;
+  justify-content: space-evenly;
+  margin: 10px auto 20px auto;
+  align-items: center;
+  width: 75%;
 }

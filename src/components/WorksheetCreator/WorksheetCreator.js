@@ -1,191 +1,406 @@
-import React, { useState, useEffect } from 'react';
-import Modal from '../UI/Modal/Modal';
-import NewWorksheet from '../NewWorksheet/NewWorksheet';
-import ActiveWorksheet from '../ActiveWorksheet/ActiveWorksheet';
-import DeleteCheck from '../DeleteCheck/DeleteCheck';
-import QuestionGenerator from '../QuestionGenerator/QuestionGenerator'
-import { useAuth0 } from '@auth0/auth0-react'
+import React, { useState, useEffect } from "react";
+import classes from "./WorksheetCreator.module.css";
+import Modal from "../UI/Modal/Modal";
+import NewWorksheet from "../NewWorksheet/NewWorksheet";
+import ActiveWorksheet from "../ActiveWorksheet/ActiveWorksheet";
+import DeleteCheck from "../DeleteCheck/DeleteCheck";
+import QuestionWizard from "../QuestionGenerator/QuestionWizard";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useDisclosure, Spinner } from "@chakra-ui/core";
+import Header from "../Header/Header";
+import ButtonCustom from "../UI/ButtonCustom/ButtonCustom";
+import SpinnerCustom from "../UI/SpinnerCustom/SpinnerCustom";
+import TeacherControls from "../TeacherControls/TeacherControls";
+import ShareWorksheet from "../ShareWorksheet/ShareWorksheet";
+
+import ControlsToggle from "../ControlsToggle/ControlsToggle";
 
 const WorksheetCreator = (props) => {
-    const [worksheetNames, setWorksheetNames] = useState([]);
+  const [worksheetNames, setWorksheetNames] = useState([]);
 
-    const [newWorksheetModalIsOpen, setNewWorksheetModalIsOpen] = useState(false);
+  const [activeWorksheet, setActiveWorksheet] = useState(null);
 
-    const [editorIsOpen, setEditorIsOpen] = useState(false);
+  const [activeQuestionAnswers, setActiveQuestionAnswers] = useState({});
 
-    const [activeWorksheet, setActiveWorksheet] = useState(null);
+  const [showPanels, setShowPanels] = useState({});
 
-    const [activeQuestionAnswers, setActiveQuestionAnswers] = useState({});
+  const [modalIsOpen, setModalIsOpen] = useState({
+    newWorksheet: false,
+    deleteCheck: false,
+    worksheetEditor: false,
+    questionGenerator: false,
+    shareWorksheet: false,
+  });
 
-    const [showPanels, setShowPanels] = useState({});
+  const [worksheetIsLoading, setWorksheetIsLoading] = useState(false);
 
-    const [deleteCheckModalIsOpen, setDeleteCheckModalIsOpen] = useState(false);
+  const [controlsAreOpen, setControlsAreOpen] = useState(true);
 
-    const [worksheetEditorModalIsOpen, setWorksheetEditorModalIsOpen] = useState(false);
+  const [editorIsOpen, setEditorIsOpen] = useState(false);
 
-    const [questionGeneratorModalIsOpen, setQuestionGeneratorModalIsOpen] = useState(false);
+  const [timedMessage, setTimedMessage] = useState({
+    showing: true,
+    message: "",
+  });
 
-    const { getAccessTokenSilently } = useAuth0();
+  const [worksheetMenuIsLoading, setWorksheetMenuIsLoading] = useState(false);
 
-    useEffect(() => {
-        const fetchWorksheets = async () => {
-            try {
-                const token = await getAccessTokenSilently();
+  const [
+    useEffectTriggerForWorksheetMenu,
+    setUseEffectTriggerForWorksheetMenu,
+  ] = useState(false);
 
-                console.log(token);
+  const [drawerIsOpen, setDrawerIsOpen] = useState(false);
 
-                const result = await fetch('http://localhost:8080/worksheets', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    }
-                })
-                const resData = await result.json();
-                console.log(resData);
-                setWorksheetNames(resData.worksheetNames);
-            } catch (err) {
-                console.log(err);
-            }
-        }
-        fetchWorksheets();
-    }, [newWorksheetModalIsOpen, worksheetEditorModalIsOpen, deleteCheckModalIsOpen, getAccessTokenSilently])
+  //   const [classroomCode, setClassroomCode] = useState("");
 
-    useEffect(() => {
-        const updatedShowPanels = {};
-        Object.keys(activeQuestionAnswers).forEach(key => {
-            if (activeQuestionAnswers[key].answer === activeQuestionAnswers[key].answerKey) {
-                updatedShowPanels[key] = false;
-            } else {
-                updatedShowPanels[key] = true;
-            }
+  const { getAccessTokenSilently, isAuthenticated, user } = useAuth0();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  let isTeacher = false;
+  if (user) {
+    isTeacher = user["https://hiddenpicturetest.com/roles"].includes("teacher");
+  }
+
+  useEffect(() => {
+    const updatedShowPanels = {};
+    Object.keys(activeQuestionAnswers).forEach((key) => {
+      if (
+        activeQuestionAnswers[key].answer.toLowerCase() ===
+        activeQuestionAnswers[key].answerKey.toLowerCase()
+      ) {
+        updatedShowPanels[key] = false;
+      } else {
+        updatedShowPanels[key] = true;
+      }
+    });
+    setShowPanels(updatedShowPanels);
+  }, [activeQuestionAnswers]);
+
+  useEffect(() => {
+    let worksheetId = null;
+    if (localStorage.getItem("worksheetId")) {
+      console.log("yeah boyee");
+      worksheetId = localStorage.getItem("worksheetId");
+      localStorage.removeItem("worksheetId");
+    } else {
+      return;
+    }
+    const addSharedWorksheetToUser = async () => {
+      try {
+        const token = await getAccessTokenSilently();
+        const result = await fetch(
+          "http://localhost:8080/accept-shared-worksheet",
+          {
+            method: "post",
+            headers: {
+              Authorization: "bearer " + token,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              worksheetId,
+            }),
+          }
+        );
+        const resData = await result.json();
+        console.log(resData);
+        setTimedMessage({
+          showing: true,
+          message: resData.message,
         });
-        setShowPanels(updatedShowPanels);
-    }, [activeQuestionAnswers]);
+        setTimeout(() => {
+          setTimedMessage({ showing: false, message: "" });
+        }, 4500);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    if (worksheetId) {
+      addSharedWorksheetToUser();
+    }
+  }, [getAccessTokenSilently]);
 
-    const openNewWorksheetModalHandler = () => {
-        setNewWorksheetModalIsOpen(true);
+  useEffect(() => {
+    setWorksheetMenuIsLoading(true);
+    const fetchWorksheets = async () => {
+      try {
+        const token = await getAccessTokenSilently();
+
+        const result = await fetch("http://localhost:8080/worksheets", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const resData = await result.json();
+        console.log(resData);
+        setWorksheetNames(resData.worksheetNames);
+        setWorksheetMenuIsLoading(false);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchWorksheets();
+  }, [useEffectTriggerForWorksheetMenu, getAccessTokenSilently]);
+
+  const closeModalHandler = () => {
+    setModalIsOpen({
+      newWorksheet: false,
+      deleteCheck: false,
+      worksheetEditor: false,
+      questionGenerator: false,
+    });
+  };
+
+  const openWorksheetHandler = async (id) => {
+    setWorksheetIsLoading(true);
+    try {
+      const token = await getAccessTokenSilently();
+      const result = await fetch("http://localhost:8080/worksheet/" + id, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const resData = await result.json();
+      let mainImageUrl;
+      if (resData.worksheet.mainImage) {
+        mainImageUrl = "http://localhost:8080/" + resData.worksheet.mainImage;
+      } else {
+        mainImageUrl = resData.worksheet.mainImageUrl;
+      }
+      setActiveWorksheet({
+        worksheetName: resData.worksheet.worksheetName,
+        mainImageUrl,
+        panelImageUrl: resData.worksheet.panelImageUrl,
+        worksheetId: resData.worksheet._id,
+        createdByUserId: "1",
+        panelNumber: resData.worksheet.panelNumber,
+      });
+      console.log(resData);
+      setActiveQuestionAnswers(resData.worksheet.questionAnswers);
+      setWorksheetIsLoading(false);
+      setDrawerIsOpen(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const changeQuestionAnswerHandler = (event, key, type) => {
+    let answerWasAttempted = false;
+    if (
+      type === "answer" ||
+      activeQuestionAnswers[key].answerWasAttempted === true
+    ) {
+      answerWasAttempted = true;
     }
 
-    const closeModalHandler = () => {
-        setNewWorksheetModalIsOpen(false);
-        setDeleteCheckModalIsOpen(false);
-        setWorksheetEditorModalIsOpen(false);
-        setQuestionGeneratorModalIsOpen(false)
-    }
+    const updatedQuestionAnswers = {
+      ...activeQuestionAnswers,
+      [key]: {
+        ...activeQuestionAnswers[key],
+        answerWasAttempted,
+        [type]: event.target.value,
+      },
+    };
+    console.log(activeQuestionAnswers[key].answerWasAttempted);
+    setActiveQuestionAnswers(updatedQuestionAnswers);
+  };
 
-    const openWorksheetHandler = async (id) => {
-        try {
-            const token = await getAccessTokenSilently();
-            console.log(token);
-            const result = await fetch('http://localhost:8080/worksheet/' + id, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                }
-            });
-            const resData = await result.json();
-            console.log(resData.worksheet.mainImage);
-            let mainImageUrl;
-            if (resData.worksheet.mainImage) {
-                mainImageUrl = 'http://localhost:8080/' + resData.worksheet.mainImage
-            } else {
-                mainImageUrl = resData.worksheet.mainImageUrl;
-            }
-            setActiveWorksheet({
-                worksheetName: resData.worksheet.worksheetName,
-                mainImageUrl,
-                panelImageUrl: resData.worksheet.panelImageUrl,
-                worksheetId: resData.worksheet._id,
-                createdByUserId: '1',
-                panelNumber: resData.worksheet.panelNumber,
-            });
-            console.log(resData);
-            setActiveQuestionAnswers(resData.worksheet.questionAnswers);
-        } catch (err) {
-            console.log(err);
+  const updateWorksheetHandler = async () => {
+    setTimedMessage({ message: "Saving...", showing: true });
+    try {
+      const token = await getAccessTokenSilently();
+      const res = await fetch("http://localhost:8080/update-worksheet", {
+        method: "PATCH",
+        body: JSON.stringify({
+          worksheetId: activeWorksheet.worksheetId,
+          questionAnswers: activeQuestionAnswers,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const resData = await res.json();
+      setTimedMessage({ showing: true, message: "Worksheet saved :)" });
+      setTimeout(() => setTimedMessage({ showing: false, message: "" }), 1500);
+      console.log(resData);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const saveProgressHandler = () => {};
+
+  const submitWorksheetHandler = () => {};
+
+  let showActiveWorksheet = null;
+
+  if (worksheetIsLoading) {
+    showActiveWorksheet = <SpinnerCustom />;
+  } else if (activeWorksheet && !worksheetIsLoading) {
+    showActiveWorksheet = (
+      <>
+        <ControlsToggle
+          controlsAreOpen={controlsAreOpen}
+          setControlsAreOpen={setControlsAreOpen}
+        />
+        {isTeacher ? (
+          <div className={classes.ButtonBox}>
+            <TeacherControls
+              updateWorksheetHandler={updateWorksheetHandler}
+              deleteWorksheetModal={() =>
+                setModalIsOpen(() => ({ ...modalIsOpen, deleteCheck: true }))
+              }
+              editWorksheetModal={() =>
+                setModalIsOpen({ ...modalIsOpen, worksheetEditor: true })
+              }
+              openQuestionGeneratorModal={() =>
+                setModalIsOpen({ ...modalIsOpen, questionGenerator: true })
+              }
+              openNewWorksheetModal={() =>
+                setModalIsOpen({ ...modalIsOpen, newWorksheet: true })
+              }
+              openShareWorksheetModal={() =>
+                setModalIsOpen({ ...modalIsOpen, shareWorksheet: true })
+              }
+              editorIsOpen={editorIsOpen}
+              setEditorIsOpen={() => setEditorIsOpen(!editorIsOpen)}
+              controlsAreOpen={controlsAreOpen}
+            />
+          </div>
+        ) : (
+          <div className={classes.ButtonBox}>
+            <ButtonCustom clicked={saveProgressHandler}>
+              Save Progress
+            </ButtonCustom>
+            <ButtonCustom clicked={submitWorksheetHandler}>
+              Submit Worksheet
+            </ButtonCustom>
+          </div>
+        )}
+        <ActiveWorksheet
+          activeQuestionAnswers={activeQuestionAnswers}
+          changeQuestionAnswerHandler={changeQuestionAnswerHandler}
+          editorIsOpen={editorIsOpen}
+          showPanels={showPanels}
+          mainImageUrl={activeWorksheet.mainImageUrl}
+          panelImageUrl={activeWorksheet.panelImageUrl}
+          // updateWorksheetHandler={updateWorksheetHandler}
+        ></ActiveWorksheet>
+      </>
+    );
+  }
+
+  const openDrawerHandler = () => {
+    setDrawerIsOpen(true);
+    setUseEffectTriggerForWorksheetMenu(!useEffectTriggerForWorksheetMenu);
+  };
+
+  return (
+    <>
+      <Header
+        openNewWorksheetModal={() =>
+          setModalIsOpen({ ...modalIsOpen, newWorksheet: true })
         }
-    }
-
-    const changeQuestionAnswerHandler = (event, key, type) => {
-        const updatedQuestionAnswers = {
-            ...activeQuestionAnswers,
-            [key]: {
-                ...activeQuestionAnswers[key],
-                [type]: event.target.value,
-            }
+        openQuestionGeneratorModal={() =>
+          setModalIsOpen({ ...modalIsOpen, questionGenerator: true })
         }
-        setActiveQuestionAnswers(updatedQuestionAnswers);
-    }
-
-    const updateWorksheetHandler = async () => {
-        try {
-            const token = await getAccessTokenSilently();
-            console.log(token);
-            const res = await fetch('http://localhost:8080/update-worksheet', {
-                method: 'PATCH',
-                body: JSON.stringify({
-                    worksheetId: activeWorksheet.worksheetId,
-                    questionAnswers: activeQuestionAnswers,
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                }
-            })
-            const resData = await res.json();
-            console.log(resData);
-        } catch (err) {
-            console.log(err);
+        activeWorksheetBool={activeWorksheet !== null}
+        isTeacher={isTeacher}
+        useEffectTriggerForWorksheetMenu={useEffectTriggerForWorksheetMenu}
+        setUseEffectTriggerForWorksheetMenu={
+          setUseEffectTriggerForWorksheetMenu
         }
-    }
-
-    return (
+        drawerIsOpen={drawerIsOpen}
+        setDrawerIsOpen={openDrawerHandler}
+        setDrawerIsClosed={() => setDrawerIsOpen(false)}
+      >
         <div>
-            <button onClick={openNewWorksheetModalHandler}>Create New Worksheet</button>
-
-            {activeWorksheet ?
-                <div>
-                    <button onClick={() => setEditorIsOpen(!editorIsOpen)}>Open Editor</button>
-                    <button name='generate-questions' onClick={() => setQuestionGeneratorModalIsOpen(true)}>Question Generator</button>
-                </div> : null}
-            <div>
-                <ul>
-                    {worksheetNames.map(worksheet => {
-                        return <div onClick={() => openWorksheetHandler(worksheet._id)} key={worksheet._id}>{worksheet.worksheetName}</div>
-                    })}
-                </ul>
-            </div>
-            { activeWorksheet ?
-                <>
-                    <ActiveWorksheet
-                        activeQuestionAnswers={activeQuestionAnswers}
-                        changeQuestionAnswerHandler={changeQuestionAnswerHandler}
-                        editorIsOpen={editorIsOpen}
-                        showPanels={showPanels}
-                        mainImageUrl={activeWorksheet.mainImageUrl}
-                        panelImageUrl={activeWorksheet.panelImageUrl} />
-                    <button onClick={updateWorksheetHandler}>Save Changes</button>
-                    <button onClick={() => setDeleteCheckModalIsOpen(true)}>Delete Current Worksheet</button>
-                    <button onClick={() => setWorksheetEditorModalIsOpen(true)}>Edit Worksheet</button>
-
-                </>
-                : null}
-            {newWorksheetModalIsOpen ?
-                <Modal closeModalHandler={closeModalHandler}>
-                    <NewWorksheet closeModalHandler={closeModalHandler} token={props.token} />
-                </Modal> : null}
-            {deleteCheckModalIsOpen ?
-                <Modal closeModalHandler={closeModalHandler}>
-                    <DeleteCheck closeModalHandler={closeModalHandler} worksheetId={activeWorksheet.worksheetId} setActiveWorksheet={setActiveWorksheet} token={props.token} />
-                </Modal> : null}
-            {worksheetEditorModalIsOpen ?
-                <Modal closeModalHandler={closeModalHandler}>
-                    <NewWorksheet closeModalHandler={closeModalHandler} activeWorksheet={activeWorksheet} openWorksheetHandler={openWorksheetHandler} token={props.token} />
-                </Modal> : null}
-            {questionGeneratorModalIsOpen ?
-                <Modal closeModalHandler={closeModalHandler}>
-                    <QuestionGenerator closeModalHandler={closeModalHandler} panelNumber={activeWorksheet.panelNumber} activeQuestionAnswers={activeQuestionAnswers} setActiveQuestionAnswers={setActiveQuestionAnswers} />
-                </Modal> : null}
+          {worksheetMenuIsLoading ? (
+            <Spinner />
+          ) : (
+            worksheetNames.map((worksheet) => {
+              return (
+                <div
+                  key={worksheet._id}
+                  className={classes.WorksheetName}
+                  onClick={() => openWorksheetHandler(worksheet._id)}
+                >
+                  <h5>{worksheet.worksheetName}</h5>
+                </div>
+              );
+            })
+          )}
         </div>
-    )
-}
+      </Header>
+
+      {showActiveWorksheet}
+
+      {modalIsOpen.newWorksheet ? (
+        <Modal closeModalHandler={closeModalHandler}>
+          <NewWorksheet
+            closeModalHandler={closeModalHandler}
+            token={props.token}
+            setTimedMessage={setTimedMessage}
+          />
+        </Modal>
+      ) : null}
+      {modalIsOpen.deleteCheck ? (
+        <Modal closeModalHandler={closeModalHandler} size="small">
+          <DeleteCheck
+            closeModalHandler={closeModalHandler}
+            worksheetId={activeWorksheet.worksheetId}
+            setActiveWorksheet={setActiveWorksheet}
+            token={props.token}
+            setTimedMessage={setTimedMessage}
+          />
+        </Modal>
+      ) : null}
+      {modalIsOpen.worksheetEditor ? (
+        <Modal closeModalHandler={closeModalHandler}>
+          <NewWorksheet
+            closeModalHandler={closeModalHandler}
+            activeWorksheet={activeWorksheet}
+            openWorksheetHandler={openWorksheetHandler}
+            token={props.token}
+            setTimedMessage={setTimedMessage}
+          />
+        </Modal>
+      ) : null}
+      {modalIsOpen.questionGenerator ? (
+        <Modal closeModalHandler={closeModalHandler}>
+          <QuestionWizard
+            setTimedMessage={setTimedMessage}
+            closeModalHandler={closeModalHandler}
+            panelNumber={activeWorksheet.panelNumber}
+            activeQuestionAnswers={activeQuestionAnswers}
+            setActiveQuestionAnswers={setActiveQuestionAnswers}
+          />
+        </Modal>
+      ) : null}
+      {modalIsOpen.shareWorksheet ? (
+        <Modal closeModalHandler={closeModalHandler}>
+          <ShareWorksheet
+            closeModalHandler={closeModalHandler}
+            token={props.token}
+            setTimedMessage={setTimedMessage}
+            worksheetId={activeWorksheet.worksheetId}
+            worksheetName={activeWorksheet.worksheetName}
+          />
+        </Modal>
+      ) : null}
+      {timedMessage.showing ? (
+        <div
+          className={
+            timedMessage.err ? classes.TimedMessage : classes.TimedErrMessage
+          }
+        >
+          {timedMessage.message}
+        </div>
+      ) : null}
+    </>
+  );
+};
 
 export default WorksheetCreator;

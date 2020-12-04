@@ -1,9 +1,9 @@
 import classes from './Background.module.css';
 import React from 'react';
 
-const Background = (props) => {
+const Background = ({ closeModalHandler }) => {
     return (
-        <div onClick={props.closeModalHandler} className={classes.Background}></div>
+        <div onClick={closeModalHandler} className={classes.Background}></div>
     )
 }
 

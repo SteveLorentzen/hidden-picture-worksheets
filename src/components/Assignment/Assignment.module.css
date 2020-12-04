@@ -1,0 +1,38 @@
+.AssignmentOuterBox {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid black;
+  margin: 5px 0;
+}
+
+.AssignmentOuterBox:hover {
+  cursor: pointer;
+  background-color: rgb(243, 253, 252);
+}
+
+.AssignmentBox {
+  width: 99%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 7px;
+  text-align: center;
+  padding: 0 30px;
+}
+
+.AssignmentName {
+  width: 33.3%;
+}
+
+.WorksheetName {
+  width: 33.3%;
+  display: flex;
+  flex-direction: column;
+}
+
+.DateBox {
+  width: 33.3%;
+}

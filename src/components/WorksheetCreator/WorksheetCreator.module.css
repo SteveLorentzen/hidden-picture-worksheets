@@ -1,0 +1,42 @@
+.ButtonBox {
+  margin: auto;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.WorksheetMenu {
+  display: flex;
+  justify-content: center;
+  margin: 5px;
+}
+
+.WorksheetName {
+  text-align: center;
+  font-size: large;
+  font-weight: bold;
+  width: 200px;
+}
+
+.WorksheetName:hover {
+  cursor: pointer;
+  width: 96%;
+  background-color: rgb(252, 230, 227);
+  transform: scale(1.1);
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.TimedMessage {
+  width: 400px;
+  margin: auto;
+  text-align: center;
+  font-weight: bold;
+}
+
+.TimedMessage {
+  width: 400px;
+  margin: auto;
+  text-align: center;
+  font-weight: bold;
+  color: red;
+}

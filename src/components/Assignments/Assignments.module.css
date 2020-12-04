@@ -1,0 +1,19 @@
+.Assignments {
+  text-align: center;
+  padding: 15px;
+}
+
+.AssignmentBox {
+}
+
+.AssignmentButton {
+  margin: 20px;
+}
+
+.AssignmentsBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  text-align: center;
+}

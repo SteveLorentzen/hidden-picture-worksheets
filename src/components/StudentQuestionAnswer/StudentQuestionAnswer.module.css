@@ -1,0 +1,21 @@
+.QuestionAnswer {
+  display: flex;
+  justify-content: space-between;
+  margin: 7px 5px;
+  align-items: center;
+  text-align: left;
+}
+
+.Question {
+  width: 100%;
+  padding-left: 10px;
+  text-align: center;
+  font-weight: bold;
+  font-size: larger;
+}
+
+.Answer {
+  width: 45%;
+  height: 25px;
+  margin-left: 10px;
+}

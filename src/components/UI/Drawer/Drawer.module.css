@@ -1,0 +1,19 @@
+.Drawer {
+  height: 100%;
+  width: 275px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 500;
+  transform: translateX(-275px);
+  transition: ease-in-out;
+  transition-duration: 0.2s;
+  background-color: white;
+  border: 2px solid black;
+}
+
+.DrawerOpen {
+  transform: translateX(0px);
+  transition: ease-in-out;
+  transition-duration: 0.2s;
+}
