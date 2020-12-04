@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import ActiveStudentWorksheet from "../ActiveStudentWorksheet/ActiveStudentWorksheet";
 import Header from "../Header/Header";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -37,7 +37,7 @@ const StudentView = () => {
       }
     });
     setShowPanels(updatedShowPanels);
-  }, [studentAnswers]);
+  }, [studentAnswers, activeQuestionAnswers]);
 
   useEffect(() => {
     const getAssignedWorksheets = async () => {
@@ -87,7 +87,7 @@ const StudentView = () => {
       }
     };
     updateStudentAnswersOnServerHandler();
-  }, [studentAnswers]);
+  }, [studentAnswers, getAccessTokenSilently, scoreId]);
 
   const openWorksheetHandler = async (assignment) => {
     setWorksheetIsLoading(true);

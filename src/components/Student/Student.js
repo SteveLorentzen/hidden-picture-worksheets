@@ -3,7 +3,7 @@ import { Box, Image, Heading } from "@chakra-ui/core";
 import { IoIosMore } from "react-icons/io";
 import { IconContext } from "react-icons";
 import classes from "./Student.module.css";
-import { Menu, MenuButton, MenuList, MenuItem, Button } from "@chakra-ui/core";
+import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/core";
 
 const Student = ({ name, email, profilePicture, removeHandler }) => {
   return (

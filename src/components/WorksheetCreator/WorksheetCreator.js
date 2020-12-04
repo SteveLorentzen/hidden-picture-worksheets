@@ -6,7 +6,7 @@ import ActiveWorksheet from "../ActiveWorksheet/ActiveWorksheet";
 import DeleteCheck from "../DeleteCheck/DeleteCheck";
 import QuestionWizard from "../QuestionGenerator/QuestionWizard";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useDisclosure, Spinner } from "@chakra-ui/core";
+import { Spinner } from "@chakra-ui/core";
 import Header from "../Header/Header";
 import ButtonCustom from "../UI/ButtonCustom/ButtonCustom";
 import SpinnerCustom from "../UI/SpinnerCustom/SpinnerCustom";
@@ -54,9 +54,7 @@ const WorksheetCreator = (props) => {
 
   //   const [classroomCode, setClassroomCode] = useState("");
 
-  const { getAccessTokenSilently, isAuthenticated, user } = useAuth0();
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { getAccessTokenSilently, user } = useAuth0();
 
   let isTeacher = false;
   if (user) {

@@ -1,6 +1,5 @@
 import React from "react";
 import classes from "./ActiveStudentWorksheet.module.css";
-import { Box } from "@chakra-ui/core";
 import StudentQuestionAnswer from "../StudentQuestionAnswer/StudentQuestionAnswer";
 
 const ActiveStudentWorksheet = ({

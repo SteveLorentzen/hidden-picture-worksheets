@@ -1,7 +1,6 @@
 import React from "react";
 import classes from "./ActiveWorksheet.module.css";
 import QuestionAnswer from "../QuestionAnswer/QuestionAnswer";
-import { Box } from "@chakra-ui/core";
 
 const ActiveWorksheet = ({
   activeQuestionAnswers,
