@@ -47,7 +47,7 @@ const Classrooms = () => {
       }
     };
     getClassrooms();
-  }, [deleting, getAccessTokenSilently]);
+  }, [getAccessTokenSilently]);
 
   const inputHandler = (event) => {
     setClassroomInput({
@@ -114,6 +114,11 @@ const Classrooms = () => {
       });
       const resData = await result.json();
       console.log(resData);
+      setClassrooms(
+        classrooms.filter((classroom) => {
+          return classroom._id !== resData.classroomId;
+        })
+      );
     } catch (err) {
       console.log(err);
     }
@@ -122,7 +127,7 @@ const Classrooms = () => {
   };
   return (
     <>
-      <Header />
+      <Header isTeacher={true} />
 
       <Box className={classes.NewClassroomBox}>
         <Button

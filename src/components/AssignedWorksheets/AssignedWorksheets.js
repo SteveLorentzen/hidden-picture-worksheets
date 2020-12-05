@@ -11,6 +11,7 @@ const AssignedWorksheets = ({ assignedWorksheets, openWorksheetHandler }) => {
             worksheetName={assignedWorksheet.worksheet.worksheetName}
             dueDate={assignedWorksheet.dueDate}
             openWorksheetHandler={() => openWorksheetHandler(assignedWorksheet)}
+            panelNumber={assignedWorksheet.worksheet.panelNumber}
           />
         );
       })}

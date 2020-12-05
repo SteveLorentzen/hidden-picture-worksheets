@@ -7,6 +7,7 @@ const AssignedWorksheet = ({
   worksheetName,
   dueDate,
   openWorksheetHandler,
+  panelNumber,
 }) => {
   const formattedDate = format(Date.parse(dueDate), "PPPPpppp")
     .split(":")
@@ -25,6 +26,7 @@ const AssignedWorksheet = ({
         <Heading as="h2" size="sm">
           due: {formattedDate + amOrPm}
         </Heading>
+        <Heading as="h3">{panelNumber} questions</Heading>
       </Box>
     </>
   );

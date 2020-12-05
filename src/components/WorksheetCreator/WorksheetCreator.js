@@ -8,7 +8,6 @@ import QuestionWizard from "../QuestionGenerator/QuestionWizard";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Spinner } from "@chakra-ui/core";
 import Header from "../Header/Header";
-import ButtonCustom from "../UI/ButtonCustom/ButtonCustom";
 import SpinnerCustom from "../UI/SpinnerCustom/SpinnerCustom";
 import TeacherControls from "../TeacherControls/TeacherControls";
 import ShareWorksheet from "../ShareWorksheet/ShareWorksheet";
@@ -44,11 +43,6 @@ const WorksheetCreator = (props) => {
   });
 
   const [worksheetMenuIsLoading, setWorksheetMenuIsLoading] = useState(false);
-
-  const [
-    useEffectTriggerForWorksheetMenu,
-    setUseEffectTriggerForWorksheetMenu,
-  ] = useState(false);
 
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
 
@@ -119,7 +113,7 @@ const WorksheetCreator = (props) => {
     }
   }, [getAccessTokenSilently]);
 
-  useEffect(() => {
+  const setWorksheets = async () => {
     setWorksheetMenuIsLoading(true);
     const fetchWorksheets = async () => {
       try {
@@ -139,7 +133,7 @@ const WorksheetCreator = (props) => {
       }
     };
     fetchWorksheets();
-  }, [useEffectTriggerForWorksheetMenu, getAccessTokenSilently]);
+  };
 
   const closeModalHandler = () => {
     setModalIsOpen({
@@ -228,10 +222,6 @@ const WorksheetCreator = (props) => {
     }
   };
 
-  const saveProgressHandler = () => {};
-
-  const submitWorksheetHandler = () => {};
-
   let showActiveWorksheet = null;
 
   if (worksheetIsLoading) {
@@ -243,40 +233,29 @@ const WorksheetCreator = (props) => {
           controlsAreOpen={controlsAreOpen}
           setControlsAreOpen={setControlsAreOpen}
         />
-        {isTeacher ? (
-          <div className={classes.ButtonBox}>
-            <TeacherControls
-              updateWorksheetHandler={updateWorksheetHandler}
-              deleteWorksheetModal={() =>
-                setModalIsOpen(() => ({ ...modalIsOpen, deleteCheck: true }))
-              }
-              editWorksheetModal={() =>
-                setModalIsOpen({ ...modalIsOpen, worksheetEditor: true })
-              }
-              openQuestionGeneratorModal={() =>
-                setModalIsOpen({ ...modalIsOpen, questionGenerator: true })
-              }
-              openNewWorksheetModal={() =>
-                setModalIsOpen({ ...modalIsOpen, newWorksheet: true })
-              }
-              openShareWorksheetModal={() =>
-                setModalIsOpen({ ...modalIsOpen, shareWorksheet: true })
-              }
-              editorIsOpen={editorIsOpen}
-              setEditorIsOpen={() => setEditorIsOpen(!editorIsOpen)}
-              controlsAreOpen={controlsAreOpen}
-            />
-          </div>
-        ) : (
-          <div className={classes.ButtonBox}>
-            <ButtonCustom clicked={saveProgressHandler}>
-              Save Progress
-            </ButtonCustom>
-            <ButtonCustom clicked={submitWorksheetHandler}>
-              Submit Worksheet
-            </ButtonCustom>
-          </div>
-        )}
+        <div className={classes.ButtonBox}>
+          <TeacherControls
+            updateWorksheetHandler={updateWorksheetHandler}
+            deleteWorksheetModal={() =>
+              setModalIsOpen(() => ({ ...modalIsOpen, deleteCheck: true }))
+            }
+            editWorksheetModal={() =>
+              setModalIsOpen({ ...modalIsOpen, worksheetEditor: true })
+            }
+            openQuestionGeneratorModal={() =>
+              setModalIsOpen({ ...modalIsOpen, questionGenerator: true })
+            }
+            openNewWorksheetModal={() =>
+              setModalIsOpen({ ...modalIsOpen, newWorksheet: true })
+            }
+            openShareWorksheetModal={() =>
+              setModalIsOpen({ ...modalIsOpen, shareWorksheet: true })
+            }
+            editorIsOpen={editorIsOpen}
+            setEditorIsOpen={() => setEditorIsOpen(!editorIsOpen)}
+            controlsAreOpen={controlsAreOpen}
+          />
+        </div>
         <ActiveWorksheet
           activeQuestionAnswers={activeQuestionAnswers}
           changeQuestionAnswerHandler={changeQuestionAnswerHandler}
@@ -292,7 +271,7 @@ const WorksheetCreator = (props) => {
 
   const openDrawerHandler = () => {
     setDrawerIsOpen(true);
-    setUseEffectTriggerForWorksheetMenu(!useEffectTriggerForWorksheetMenu);
+    setWorksheets();
   };
 
   return (
@@ -306,10 +285,6 @@ const WorksheetCreator = (props) => {
         }
         activeWorksheetBool={activeWorksheet !== null}
         isTeacher={isTeacher}
-        useEffectTriggerForWorksheetMenu={useEffectTriggerForWorksheetMenu}
-        setUseEffectTriggerForWorksheetMenu={
-          setUseEffectTriggerForWorksheetMenu
-        }
         drawerIsOpen={drawerIsOpen}
         setDrawerIsOpen={openDrawerHandler}
         setDrawerIsClosed={() => setDrawerIsOpen(false)}

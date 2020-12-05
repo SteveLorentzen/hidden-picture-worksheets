@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import ActiveStudentWorksheet from "../ActiveStudentWorksheet/ActiveStudentWorksheet";
-import Header from "../Header/Header";
+import StudentHeader from "../StudentHeader/StudentHeader";
 import { useAuth0 } from "@auth0/auth0-react";
 import AssignedWorksheets from "../AssignedWorksheets/AssignedWorksheets";
-import { Spinner } from "@chakra-ui/core";
+import { Spinner, Button } from "@chakra-ui/core";
 
 const StudentView = () => {
   const [assignedWorksheets, setAssignedWorksheets] = useState([]);
@@ -31,7 +31,6 @@ const StudentView = () => {
         activeQuestionAnswers[key].answerKey.toLowerCase()
       ) {
         updatedShowPanels[key] = false;
-        console.log("got here");
       } else {
         updatedShowPanels[key] = true;
       }
@@ -64,26 +63,28 @@ const StudentView = () => {
   useEffect(() => {
     const updateStudentAnswersOnServerHandler = async () => {
       console.log("updating!");
-      try {
-        const token = await getAccessTokenSilently();
-        const result = await fetch(
-          "http://localhost:8080/update-student-answers",
-          {
-            method: "put",
-            headers: {
-              Authorization: "bearer " + token,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              studentAnswers,
-              scoreId,
-            }),
-          }
-        );
-        const resData = await result.json();
-        console.log(resData);
-      } catch (err) {
-        console.log(err);
+      if (scoreId) {
+        try {
+          const token = await getAccessTokenSilently();
+          const result = await fetch(
+            "http://localhost:8080/update-student-answers",
+            {
+              method: "put",
+              headers: {
+                Authorization: "bearer " + token,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                studentAnswers,
+                scoreId,
+              }),
+            }
+          );
+          const resData = await result.json();
+          console.log(resData);
+        } catch (err) {
+          console.log(err);
+        }
       }
     };
     updateStudentAnswersOnServerHandler();
@@ -91,8 +92,6 @@ const StudentView = () => {
 
   const openWorksheetHandler = async (assignment) => {
     setWorksheetIsLoading(true);
-    setActiveQuestionAnswers(assignment.worksheet.questionAnswers);
-
     try {
       const token = await getAccessTokenSilently();
       const result = await fetch(
@@ -104,9 +103,10 @@ const StudentView = () => {
         }
       );
       const resData = await result.json();
-      setStudentAnswers(resData.answers);
-      setScoreId(resData.score._id);
       console.log(resData);
+      setStudentAnswers(resData.answers);
+      setActiveQuestionAnswers(assignment.worksheet.questionAnswers);
+      setScoreId(resData.score._id);
       setActiveStudentWorksheet(assignment.worksheet);
     } catch (err) {
       console.log(err);
@@ -126,24 +126,34 @@ const StudentView = () => {
     console.log(updatedStudentAnswers);
   };
 
+  const closeWorksheetHandler = () => {
+    setActiveStudentWorksheet(null);
+    setActiveQuestionAnswers({});
+    setStudentAnswers({});
+    setScoreId("");
+  };
+
   let showActiveStudentWorksheet = <Spinner />;
 
   if (!worksheetIsLoading && activeStudentWorksheet) {
     showActiveStudentWorksheet = (
-      <ActiveStudentWorksheet
-        activeQuestionAnswers={activeQuestionAnswers}
-        changeAnswerHandler={changeAnswerHandler}
-        mainImageUrl={activeStudentWorksheet.mainImageUrl}
-        panelImageUrl={activeStudentWorksheet.panelImageUrl}
-        showPanels={showPanels}
-        studentAnswers={studentAnswers}
-      />
+      <>
+        <ActiveStudentWorksheet
+          activeQuestionAnswers={activeQuestionAnswers}
+          changeAnswerHandler={changeAnswerHandler}
+          mainImageUrl={activeStudentWorksheet.mainImageUrl}
+          panelImageUrl={activeStudentWorksheet.panelImageUrl}
+          showPanels={showPanels}
+          studentAnswers={studentAnswers}
+        />
+        <Button onClick={closeWorksheetHandler}>Return to Assignments</Button>
+      </>
     );
   }
 
   return (
     <>
-      <Header />
+      <StudentHeader />
       {activeStudentWorksheet ? (
         showActiveStudentWorksheet
       ) : (

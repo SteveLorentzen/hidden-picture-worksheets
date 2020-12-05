@@ -11,7 +11,6 @@ import CustomDrawer from "../UI/Drawer/Drawer";
 
 const Header = ({
   children,
-  isTeacher,
   openNewWorksheetModal,
   isHeaderForWelcomePage,
   isHeaderForJoinPage,
@@ -45,7 +44,7 @@ const Header = ({
                 alignItems: "center",
               }}
             >
-              {isAuthenticated && isTeacher ? (
+              {isAuthenticated ? (
                 <>
                   <IconContext.Provider
                     value={{ size: "3em", className: `${classes.Icons}` }}

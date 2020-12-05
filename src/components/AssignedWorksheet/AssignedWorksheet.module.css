@@ -10,3 +10,8 @@
   align-items: center;
   justify-content: center;
 }
+
+.AssignedWorksheet:hover {
+  cursor: pointer;
+  background-color: rgb(245, 255, 254);
+}

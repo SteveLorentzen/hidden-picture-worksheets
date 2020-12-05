@@ -16,6 +16,12 @@ function App() {
 
   const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();
 
+  let isTeacher = false;
+
+  if (user) {
+    isTeacher = user["https://hiddenpicturetest.com/roles"].includes("teacher");
+  }
+
   useEffect(() => {
     const createNewUser = async () => {
       let classroomCode = null;
@@ -63,8 +69,7 @@ function App() {
           exact
           render={(props) => <Classroom classroomCode={classroomCode} />}
         />
-        <Route path="/classrooms" exact component={Classrooms} />
-        <Route path="/assignments" exact component={Assignments} />
+
         <Route path="/join" exact component={JoinClassroom} />
         <Route
           path="/accept-worksheet/:worksheetId"
@@ -72,16 +77,18 @@ function App() {
           component={AcceptWorksheet}
         />
 
-        {isAuthenticated &&
-        user["https://hiddenpicturetest.com/roles"].includes("teacher") ? (
-          <Route
-            path="/worksheets"
-            exact
-            render={(props) => <WorksheetCreator />}
-          />
+        {isAuthenticated && isTeacher ? (
+          <>
+            <Route path="/classrooms" exact component={Classrooms} />
+            <Route path="/assignments" exact component={Assignments} />
+            <Route
+              path="/worksheets"
+              exact
+              render={(props) => <WorksheetCreator />}
+            />
+          </>
         ) : null}
-        {isAuthenticated &&
-        !user["https://hiddenpicturetest.com/roles"].includes("teacher") ? (
+        {isAuthenticated && !isTeacher ? (
           <Route path="/worksheets" exact render={(props) => <StudentView />} />
         ) : null}
 

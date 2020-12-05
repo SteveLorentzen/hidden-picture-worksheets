@@ -1,0 +1,91 @@
+.Header {
+  text-align: center;
+}
+
+.DrawerHeader {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.MenuButton {
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.MenuButton:hover {
+  cursor: pointer;
+  background-color: rgb(235, 90, 65);
+}
+
+.NewWorksheetIcon {
+  margin: 7px;
+}
+
+.Icon {
+  margin: 0 10px;
+  border-radius: 10px;
+  background-color: rgb(252, 151, 133);
+  transform: scale(1);
+  transition: ease;
+  transition-duration: 0.3s;
+}
+
+.IconDescription {
+  padding: 3px 5px;
+  border: 2px solid black;
+  position: fixed;
+  background-color: rgb(228, 253, 253);
+  z-index: 500;
+  top: 65px;
+}
+
+.Icon:hover {
+  cursor: pointer;
+  background-color: rgb(252, 129, 107);
+}
+
+.Active {
+  background-color: rgb(255, 214, 34);
+  transform: scale(1.2);
+  transition: ease;
+  transition-duration: 0.3s;
+}
+
+.ActiveNavLink {
+  color: white;
+}
+
+.Active:hover {
+  background-color: rgb(255, 214, 34);
+}
+
+.NavLinks {
+  margin: 10px;
+  display: flex;
+}
+
+.NavLink {
+  margin: 10px;
+  list-style: none;
+}
+
+.NavLink:hover {
+  color: white;
+}
+
+.Image {
+  border-radius: 50px;
+  height: 50px;
+  width: 50px;
+  min-width: 50px;
+}
+
+.WorksheetNameBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 80%;
+}
