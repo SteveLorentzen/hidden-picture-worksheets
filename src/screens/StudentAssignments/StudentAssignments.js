@@ -42,10 +42,10 @@ const StudentAssignments = () => {
       <StudentHeader />
       <Box className={classes.GreetingBox}>
         <Heading as="h1" size="xl">
-          Welcome Students!
+          Welcome <strong style={{ color: "tomato" }}>Students</strong>!
         </Heading>
         <Heading as="h2" size="lg">
-          Select a <strong style={{ color: "tomato" }}>worksheet</strong>:
+          Select a worksheet:
         </Heading>
       </Box>
 

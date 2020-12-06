@@ -132,15 +132,13 @@ const StudentWorksheet = () => {
     >
       {Object.keys(questionAnswers).map((questionAnswerKey, index) => {
         return (
-          <div>
-            <StudentQuestionAnswer
-              key={questionAnswerKey}
-              activeQuestionAnswer={questionAnswers[questionAnswerKey]}
-              changeAnswerHandler={changeAnswerHandler}
-              activeQuestionAnswerKey={questionAnswerKey}
-              studentAnswer={studentAnswers[questionAnswerKey]}
-            />
-          </div>
+          <StudentQuestionAnswer
+            key={questionAnswerKey}
+            activeQuestionAnswer={questionAnswers[questionAnswerKey]}
+            changeAnswerHandler={changeAnswerHandler}
+            activeQuestionAnswerKey={questionAnswerKey}
+            studentAnswer={studentAnswers[questionAnswerKey]}
+          />
         );
       })}
     </ActiveStudentWorksheet>
