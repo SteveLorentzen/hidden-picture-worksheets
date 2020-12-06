@@ -1,12 +1,13 @@
 import React from "react";
-import { Box, Heading, Image } from "@chakra-ui/core";
-import { NavLink, Link } from "react-router-dom";
+import { Box, Heading, Image, Button } from "@chakra-ui/core";
+import { Link, NavLink } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
+import { IoIosArrowBack } from "react-icons/io";
 import classes from "./StudentHeader.module.css";
 import Login from "../Auth/Login/Login";
 import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/core";
 
-const StudentHeader = () => {
+const StudentHeader = ({ isHeaderForStudentWorksheet }) => {
   const { isAuthenticated, user, logout } = useAuth0();
 
   return (
@@ -26,7 +27,14 @@ const StudentHeader = () => {
               justifyContent: "flex-start",
               alignItems: "center",
             }}
-          ></div>
+          >
+            {isHeaderForStudentWorksheet ? (
+              <Button variant="outline" display="flex">
+                <IoIosArrowBack />
+                <NavLink to="/">Back to Assignments</NavLink>
+              </Button>
+            ) : null}
+          </div>
 
           <div>
             <Link to="/">

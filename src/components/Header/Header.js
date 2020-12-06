@@ -14,6 +14,7 @@ const Header = ({
   openNewWorksheetModal,
   isHeaderForWelcomePage,
   isHeaderForJoinPage,
+  isHeaderForWorksheetsPage,
   drawerIsOpen,
   setDrawerIsOpen,
   setDrawerIsClosed,
@@ -44,7 +45,7 @@ const Header = ({
                 alignItems: "center",
               }}
             >
-              {isAuthenticated ? (
+              {isAuthenticated && isHeaderForWorksheetsPage ? (
                 <>
                   <IconContext.Provider
                     value={{ size: "3em", className: `${classes.Icons}` }}

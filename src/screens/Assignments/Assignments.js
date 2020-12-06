@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import Header from "../Header/Header";
+import Header from "../../components/Header/Header";
 import { Box, Heading, Button } from "@chakra-ui/core";
 import classes from "./Assignments.module.css";
-import Modal from "../UI/Modal/Modal";
-import NewAssignment from "../NewAssignment/NewAssignment";
+import Modal from "../../components/UI/Modal/Modal";
+import NewAssignment from "../../components/NewAssignment/NewAssignment";
 import { useAuth0 } from "@auth0/auth0-react";
-import Assignment from "../Assignment/Assignment";
+import Assignment from "../../components/Assignment/Assignment";
 
 const Assignments = () => {
   const [assignments, setAssignments] = useState([

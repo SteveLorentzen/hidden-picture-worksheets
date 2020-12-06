@@ -1,9 +1,7 @@
 .AssignedWorksheet {
   border: 3px solid black;
-  width: 30%;
-  min-width: 200px;
-  min-height: 200px;
-  margin: 5px;
+  width: 100%;
+  height: 100%;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -14,4 +12,5 @@
 .AssignedWorksheet:hover {
   cursor: pointer;
   background-color: rgb(245, 255, 254);
+  transform: scale(1.05);
 }

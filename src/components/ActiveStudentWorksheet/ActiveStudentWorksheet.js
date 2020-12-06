@@ -1,6 +1,5 @@
 import React from "react";
 import classes from "./ActiveStudentWorksheet.module.css";
-import StudentQuestionAnswer from "../StudentQuestionAnswer/StudentQuestionAnswer";
 
 const ActiveStudentWorksheet = ({
   activeQuestionAnswers,
@@ -9,27 +8,11 @@ const ActiveStudentWorksheet = ({
   mainImageUrl,
   panelImageUrl,
   studentAnswers,
+  children,
 }) => {
   return (
     <div className={classes.WorksheetContainer}>
-      <div className={classes.QuestionAnswerContainer}>
-        {Object.keys(activeQuestionAnswers).map(
-          (activeQuestionAnswerKey, index) => {
-            return (
-              <div key={activeQuestionAnswerKey}>
-                <StudentQuestionAnswer
-                  activeQuestionAnswer={
-                    activeQuestionAnswers[activeQuestionAnswerKey]
-                  }
-                  changeAnswerHandler={changeAnswerHandler}
-                  activeQuestionAnswerKey={activeQuestionAnswerKey}
-                  studentAnswer={studentAnswers[activeQuestionAnswerKey]}
-                />
-              </div>
-            );
-          }
-        )}
-      </div>
+      <div className={classes.QuestionAnswerContainer}>{children}</div>
       <div
         style={{
           backgroundImage: `url('${mainImageUrl}')`,

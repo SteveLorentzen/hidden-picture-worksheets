@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import classes from "./WorksheetCreator.module.css";
-import Modal from "../UI/Modal/Modal";
-import NewWorksheet from "../NewWorksheet/NewWorksheet";
-import ActiveWorksheet from "../ActiveWorksheet/ActiveWorksheet";
-import DeleteCheck from "../DeleteCheck/DeleteCheck";
-import QuestionWizard from "../QuestionGenerator/QuestionWizard";
+import Modal from "../../components/UI/Modal/Modal";
+import NewWorksheet from "../../components/NewWorksheet/NewWorksheet";
+import ActiveWorksheet from "../../components/ActiveWorksheet/ActiveWorksheet";
+import DeleteCheck from "../../components/DeleteCheck/DeleteCheck";
+import QuestionWizard from "../../components/QuestionGenerator/QuestionWizard";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Spinner } from "@chakra-ui/core";
-import Header from "../Header/Header";
-import SpinnerCustom from "../UI/SpinnerCustom/SpinnerCustom";
-import TeacherControls from "../TeacherControls/TeacherControls";
-import ShareWorksheet from "../ShareWorksheet/ShareWorksheet";
+import Header from "../../components/Header/Header";
+import SpinnerCustom from "../../components/UI/SpinnerCustom/SpinnerCustom";
+import TeacherControls from "../../components/TeacherControls/TeacherControls";
+import ShareWorksheet from "../../components/ShareWorksheet/ShareWorksheet";
 
-import ControlsToggle from "../ControlsToggle/ControlsToggle";
+import ControlsToggle from "../../components/ControlsToggle/ControlsToggle";
 
 const WorksheetCreator = (props) => {
   const [worksheetNames, setWorksheetNames] = useState([]);
@@ -288,6 +288,7 @@ const WorksheetCreator = (props) => {
         drawerIsOpen={drawerIsOpen}
         setDrawerIsOpen={openDrawerHandler}
         setDrawerIsClosed={() => setDrawerIsOpen(false)}
+        isHeaderForWorksheetsPage
       >
         <div>
           {worksheetMenuIsLoading ? (

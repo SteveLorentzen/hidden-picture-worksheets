@@ -1,0 +1,17 @@
+.Link {
+  border-radius: 10px;
+  margin: 5px;
+}
+
+.GreetingBox {
+  height: 125px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.Spinner {
+  display: flex;
+  justify-content: center;
+}
