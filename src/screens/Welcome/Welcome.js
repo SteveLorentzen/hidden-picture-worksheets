@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../Header/Header";
+import Header from "../../components/common-components/Header/Header";
 import { Box, Heading, List, ListItem, Button, Image } from "@chakra-ui/core";
 import { useAuth0 } from "@auth0/auth0-react";
 import hiddenPictureDemo from "../../assets/hidden-picture-demo.png";

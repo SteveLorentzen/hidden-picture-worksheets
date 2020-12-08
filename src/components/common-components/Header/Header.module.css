@@ -1,10 +1,28 @@
 .Header {
   text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.Nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .DrawerHeader {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.MenuBox {
+  display: flex;
+  min-width: 350px;
+  width: 350px;
   justify-content: space-between;
   align-items: center;
 }
@@ -17,6 +35,9 @@
 .MenuButton:hover {
   cursor: pointer;
   background-color: rgb(235, 90, 65);
+}
+
+.SiteTitle {
 }
 
 .NewWorksheetIcon {

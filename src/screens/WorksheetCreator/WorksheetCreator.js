@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
 import classes from "./WorksheetCreator.module.css";
 import Modal from "../../components/UI/Modal/Modal";
-import NewWorksheet from "../../components/NewWorksheet/NewWorksheet";
-import ActiveWorksheet from "../../components/ActiveWorksheet/ActiveWorksheet";
-import DeleteCheck from "../../components/DeleteCheck/DeleteCheck";
-import QuestionWizard from "../../components/QuestionGenerator/QuestionWizard";
+import NewWorksheet from "../../components/worksheet-creator-components/NewWorksheet/NewWorksheet";
+import ActiveWorksheet from "../../components/worksheet-creator-components/ActiveWorksheet/ActiveWorksheet";
+import DeleteCheck from "../../components/worksheet-creator-components/DeleteCheck/DeleteCheck";
+import QuestionWizard from "../../components/worksheet-creator-components/QuestionWizard/QuestionWizard";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Spinner } from "@chakra-ui/core";
-import Header from "../../components/Header/Header";
+import { Spinner, Heading } from "@chakra-ui/core";
+import Header from "../../components/common-components/Header/Header";
 import SpinnerCustom from "../../components/UI/SpinnerCustom/SpinnerCustom";
-import TeacherControls from "../../components/TeacherControls/TeacherControls";
-import ShareWorksheet from "../../components/ShareWorksheet/ShareWorksheet";
-
-import ControlsToggle from "../../components/ControlsToggle/ControlsToggle";
+import TeacherControls from "../../components/worksheet-creator-components/TeacherControls/TeacherControls";
+import ShareWorksheet from "../../components/worksheet-creator-components/ShareWorksheet/ShareWorksheet";
+import ControlsToggle from "../../components/worksheet-creator-components/ControlsToggle/ControlsToggle";
 
 const WorksheetCreator = (props) => {
   const [worksheetNames, setWorksheetNames] = useState([]);
@@ -154,15 +153,15 @@ const WorksheetCreator = (props) => {
         },
       });
       const resData = await result.json();
-      let mainImageUrl;
-      if (resData.worksheet.mainImage) {
-        mainImageUrl = "http://localhost:8080/" + resData.worksheet.mainImage;
-      } else {
-        mainImageUrl = resData.worksheet.mainImageUrl;
-      }
+      // let mainImageUrl;
+      // if (resData.worksheet.mainImage) {
+      //   mainImageUrl = "http://localhost:8080/" + resData.worksheet.mainImage;
+      // } else {
+      //   mainImageUrl = resData.worksheet.mainImageUrl;
+      // }
       setActiveWorksheet({
         worksheetName: resData.worksheet.worksheetName,
-        mainImageUrl,
+        mainImageUrl: resData.worksheet.mainImageUrl,
         panelImageUrl: resData.worksheet.panelImageUrl,
         worksheetId: resData.worksheet._id,
         createdByUserId: "1",
@@ -364,15 +363,18 @@ const WorksheetCreator = (props) => {
           />
         </Modal>
       ) : null}
-      {timedMessage.showing ? (
-        <div
-          className={
-            timedMessage.err ? classes.TimedMessage : classes.TimedErrMessage
-          }
-        >
-          {timedMessage.message}
-        </div>
-      ) : null}
+      <div className={classes.TimedMessageBox}>
+        {timedMessage.showing ? (
+          <Heading
+            as="h6"
+            className={
+              timedMessage.err ? classes.TimedMessage : classes.TimedErrMessage
+            }
+          >
+            {timedMessage.message}
+          </Heading>
+        ) : null}
+      </div>
     </>
   );
 };

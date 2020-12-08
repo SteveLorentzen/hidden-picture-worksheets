@@ -2,12 +2,9 @@ import React from "react";
 import classes from "./ActiveStudentWorksheet.module.css";
 
 const ActiveStudentWorksheet = ({
-  activeQuestionAnswers,
-  changeAnswerHandler,
   showPanels,
   mainImageUrl,
   panelImageUrl,
-  studentAnswers,
   children,
 }) => {
   return (

@@ -1,6 +1,6 @@
 import React from "react";
 import classes from "./ActiveWorksheet.module.css";
-import QuestionAnswer from "../QuestionAnswer/QuestionAnswer";
+import QuestionAnswer from "./QuestionAnswer/QuestionAnswer";
 
 const ActiveWorksheet = ({
   activeQuestionAnswers,

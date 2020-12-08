@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Button, Box, Input, Heading, Spinner } from "@chakra-ui/core";
-import Header from "../../components/Header/Header";
+import Header from "../../components/common-components/Header/Header";
 import classes from "./Classrooms.module.css";
 import { useAuth0 } from "@auth0/auth0-react";
-import ClassroomPreview from "../../components/ClassroomPreview/ClassroomPreview";
-import Classroom from "../../components/Classroom/Classroom";
+import ClassroomPreview from "../../components/classrooms-components/ClassroomPreview/ClassroomPreview";
+import Classroom from "../../components/classrooms-components/Classroom/Classroom";
 import Modal from "../../components/UI/Modal/Modal";
 
 const Classrooms = () => {

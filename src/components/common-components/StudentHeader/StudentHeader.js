@@ -4,7 +4,7 @@ import { Link, NavLink } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { IoIosArrowBack } from "react-icons/io";
 import classes from "./StudentHeader.module.css";
-import Login from "../Auth/Login/Login";
+import Login from "../../Auth/Login/Login";
 import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/core";
 
 const StudentHeader = ({ isHeaderForStudentWorksheet }) => {
@@ -34,14 +34,13 @@ const StudentHeader = ({ isHeaderForStudentWorksheet }) => {
                 <NavLink to="/">Back to Assignments</NavLink>
               </Button>
             ) : null}
-          </div>
-
-          <div>
-            <Link to="/">
-              <Heading as="h2" size="lg" color="white">
-                HiddenPictureWorksheets.com
-              </Heading>
-            </Link>
+            <div>
+              <Link to="/">
+                <Heading as="h2" size="md" color="white">
+                  HiddenPictureWorksheets.com
+                </Heading>
+              </Link>
+            </div>
           </div>
 
           <div

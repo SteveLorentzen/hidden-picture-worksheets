@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Input, Heading, Select, Box, Button } from "@chakra-ui/core";
 import classes from "./QuestionWizard.module.css";
-import { questionWizardDetectErrors } from "../../util/errors";
+import { questionWizardDetectErrors } from "../../../util/errors";
 
 const QuestionWizard = ({
   setTimedMessage,

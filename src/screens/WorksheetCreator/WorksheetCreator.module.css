@@ -26,6 +26,10 @@
   border-radius: 5px;
 }
 
+.TimedMessageBox {
+  text-align: center;
+}
+
 .TimedMessage {
   width: 400px;
   margin: auto;

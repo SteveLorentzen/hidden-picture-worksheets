@@ -82,48 +82,6 @@ const Classroom = ({ classroomName, classroomCode, classroomId }) => {
 
   return (
     <>
-      {/* <Box textAlign="center" margin="20px auto">
-        <Heading margin="auto" as="h1">
-          {name}
-        </Heading>
-      </Box>
-      <Box className={classes.InviteOptions}>
-        <Box
-          className={classes.EmailInvite}
-          border="1px solid black"
-          padding="40px"
-          borderRadius="10px"
-          w="25%"
-        >
-          <Heading as="h3" size="lg" marginBottom="10px">
-            Email invitation
-          </Heading>
-          <Box className={classes.EmailInviteInput}>
-            <Input
-              w="75%"
-              onChange={(event) => setStudentEmail(event.target.value)}
-              placeholder="Student Email"
-            />
-            <Button onClick={inviteHandler}>Send Invites</Button>
-          </Box>
-        </Box>
-        <Heading as="h3" size="lg" margin="0 50px">
-          or
-        </Heading>
-        <Box
-          w="25%"
-          border="1px solid black"
-          padding="40px"
-          borderRadius="10px"
-        >
-          <Heading as="h3" size="lg" marginBottom="10px">
-            Use classroom code
-          </Heading>
-          <Button onClick={() => setClassroomCodeModalIsOpen(true)}>
-            View Code
-          </Button>
-        </Box>
-      </Box>*/}
       <Box textAlign="center" margin="30px">
         <Box>
           <Heading as="h2">Students in {classroomName}:</Heading>
@@ -144,31 +102,6 @@ const Classroom = ({ classroomName, classroomCode, classroomId }) => {
             })
           : null}
       </Box>
-      {/* {classroomCodeModalIsOpen ? (
-        <Modal closeModalHandler={() => setClassroomCodeModalIsOpen(false)}>
-          <Heading as="h2" size="md">
-            Your Classroom Code is:
-          </Heading>
-          <Heading
-            as="h3"
-            size="lg"
-            fontWeight="bolder"
-            textAlign="center"
-            margin="10px"
-          >
-            {code}
-          </Heading>
-          <Heading as="h3" size="md">
-            Have your students go to
-          </Heading>
-          <Heading as="h2" size="sm" textAlign="center" margin="10px">
-            http://localhost:3000/join
-          </Heading>
-          <Heading as="h3" size="md">
-            and enter the code
-          </Heading>
-        </Modal>
-      ) : null} */}
     </>
   );
 };

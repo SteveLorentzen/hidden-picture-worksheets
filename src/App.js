@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Route, Switch } from "react-router-dom";
-import Welcome from "./components/Welcome/Welcome";
+import Welcome from "./screens/Welcome/Welcome";
 import WorksheetCreator from "./screens/WorksheetCreator/WorksheetCreator";
-import Classroom from "./components/Classroom/Classroom";
-import JoinClassroom from "./components/JoinClassroom/JoinClassroom";
+import Classroom from "./components/classrooms-components/Classroom/Classroom";
+import JoinClassroom from "./screens/JoinClassroom/JoinClassroom";
 import { useAuth0 } from "@auth0/auth0-react";
 import Classrooms from "./screens/Classrooms/Classrooms";
 import AcceptWorksheet from "./components/AcceptWorksheet/AcceptWorksheet";

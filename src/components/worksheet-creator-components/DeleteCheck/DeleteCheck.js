@@ -2,7 +2,7 @@ import classes from "./DeleteCheck.module.css";
 import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Button, Box, Heading } from "@chakra-ui/core";
-import ButtonCustom from "../../components/UI/ButtonCustom/ButtonCustom";
+import ButtonCustom from "../../UI/ButtonCustom/ButtonCustom";
 
 const DeleteCheck = ({
   setTimedMessage,

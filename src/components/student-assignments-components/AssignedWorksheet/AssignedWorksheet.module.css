@@ -5,12 +5,22 @@
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: space-around;
+  padding: 0 10px 10px 10px;
 }
 
 .AssignedWorksheet:hover {
   cursor: pointer;
   background-color: rgb(245, 255, 254);
   transform: scale(1.05);
+}
+
+.WorksheetTitle {
+}
+
+.WorksheetDueDate {
+}
+
+.WorksheetProgress {
 }

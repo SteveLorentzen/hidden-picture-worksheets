@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import classes from "./JoinClassroom.module.css";
 import { useAuth0 } from "@auth0/auth0-react";
-import Header from "../Header/Header";
+import Header from "../../components/common-components/Header/Header";
 import { Button, Input, Box } from "@chakra-ui/core";
 
 const JoinClassroom = () => {

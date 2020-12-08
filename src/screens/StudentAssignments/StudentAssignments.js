@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import classes from "./StudentAssignments.module.css";
 import { Link } from "react-router-dom";
-import StudentHeader from "../../components/StudentHeader/StudentHeader";
+import StudentHeader from "../../components/common-components/StudentHeader/StudentHeader";
 import { useAuth0 } from "@auth0/auth0-react";
-import AssignedWorksheet from "../../components/AssignedWorksheet/AssignedWorksheet";
+import AssignedWorksheet from "../../components/student-assignments-components/AssignedWorksheet/AssignedWorksheet";
 import { Spinner, Box, Heading } from "@chakra-ui/core";
 
 const StudentAssignments = () => {

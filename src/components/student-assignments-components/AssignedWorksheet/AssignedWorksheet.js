@@ -22,11 +22,23 @@ const AssignedWorksheet = ({
   return (
     <>
       <Box className={classes.AssignedWorksheet} onClick={openWorksheetHandler}>
-        <Heading as="h1">{worksheetName}</Heading>
-        <Heading as="h2" size="sm">
-          due: {formattedDate + amOrPm}
-        </Heading>
-        <Heading as="h3">{panelNumber} questions</Heading>
+        <Box display="flex" alignItems="center">
+          <Heading as="h1" className={classes.WorksheetTitle}>
+            {worksheetName}
+          </Heading>
+        </Box>
+
+        <Box display="flex" alignItems="center">
+          <Heading as="h2" size="sm" className={classes.WorksheetDueDate}>
+            due: {formattedDate + amOrPm}
+          </Heading>
+        </Box>
+
+        <Box display="flex" alignItems="center">
+          <Heading as="h3" size="md" className={classes.WorksheetProgress}>
+            {panelNumber} questions
+          </Heading>
+        </Box>
       </Box>
     </>
   );

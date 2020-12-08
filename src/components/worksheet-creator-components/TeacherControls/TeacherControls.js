@@ -138,20 +138,6 @@ const TeacherControls = ({
               ) : null}
             </Box>
             <Box className={classes.EditDeleteWorksheetIcons}>
-              {/* <div>
-                <IoIosAddCircle
-                  className={classes.Icons}
-                  onClick={openNewWorksheetModal}
-                  onMouseEnter={() => {
-                    descriptionTimeoutHandler("New Worksheet");
-                  }}
-                  onMouseLeave={clearDescriptionHandler}
-                  onMouseDown={clearDescriptionHandler}
-                />
-                {descriptionModal === "New Worksheet" ? (
-                  <div className={classes.Description}>{descriptionModal}</div>
-                ) : null}
-              </div> */}
               <div>
                 <IoIosConstruct
                   className={classes.Icons}

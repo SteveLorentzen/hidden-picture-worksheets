@@ -2,9 +2,9 @@ import * as React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useParams } from "react-router-dom";
 import { Spinner, Box } from "@chakra-ui/core";
-import ActiveStudentWorksheet from "../../components/ActiveStudentWorksheet/ActiveStudentWorksheet";
-import StudentQuestionAnswer from "../../components/StudentQuestionAnswer/StudentQuestionAnswer";
-import StudentHeader from "../../components/StudentHeader/StudentHeader";
+import ActiveStudentWorksheet from "../../components/student-worksheet-components/ActiveStudentWorksheet/ActiveStudentWorksheet";
+import StudentQuestionAnswer from "../../components/student-worksheet-components/StudentQuestionAnswer/StudentQuestionAnswer";
+import StudentHeader from "../../components/common-components/StudentHeader/StudentHeader";
 
 const StudentWorksheet = () => {
   const [worksheet, setWorksheet] = React.useState({});
