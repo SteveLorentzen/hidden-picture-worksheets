@@ -10,6 +10,15 @@
   margin: 5px;
 }
 
+.WelcomeBox {
+  margin: auto;
+  text-align: center;
+}
+
+.Accent {
+  color: tomato;
+}
+
 .WorksheetName {
   text-align: center;
   font-size: large;

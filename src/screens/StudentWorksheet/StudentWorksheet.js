@@ -9,11 +9,7 @@ import StudentHeader from "../../components/common-components/StudentHeader/Stud
 const StudentWorksheet = () => {
   const [worksheet, setWorksheet] = React.useState({});
 
-  const [studentAnswers, setStudentAnswers] = React.useState({});
-
   const [questionAnswers, setQuestionAnswers] = React.useState({});
-
-  const [showPanels, setShowPanels] = React.useState({});
 
   const [scoreId, setScoreId] = React.useState("");
 
@@ -23,24 +19,25 @@ const StudentWorksheet = () => {
 
   const { getAccessTokenSilently } = useAuth0();
 
-  React.useEffect(() => {
-    console.log("i ran!");
-    const updatedShowPanels = {};
-    Object.keys(questionAnswers).forEach((key) => {
-      if (
-        studentAnswers[key].answer.toLowerCase() ===
-        questionAnswers[key].answerKey.toLowerCase()
-      ) {
-        updatedShowPanels[key] = false;
-      } else {
-        updatedShowPanels[key] = true;
-      }
-    });
-    setShowPanels(updatedShowPanels);
-  }, [studentAnswers, questionAnswers]);
+  // React.useEffect(() => {
+  //   console.log("i ran!");
+  //   const updatedShowPanels = {};
+  //   Object.keys(questionAnswers).forEach((key) => {
+  //     if (
+  //       studentAnswers[key].answer.toLowerCase() ===
+  //       questionAnswers[key].answerKey.toLowerCase()
+  //     ) {
+  //       updatedShowPanels[key] = false;
+  //     } else {
+  //       updatedShowPanels[key] = true;
+  //     }
+  //   });
+  //   setShowPanels(updatedShowPanels);
+  // }, [studentAnswers, questionAnswers]);
 
   React.useEffect(() => {
     console.log(assignmentId);
+
     const getWorksheet = async (assignmentId) => {
       setWorksheetIsLoading(true);
       try {
@@ -70,10 +67,27 @@ const StudentWorksheet = () => {
         //   studentAnswers: resData.answers,
         // };
         console.log(resData);
-        setStudentAnswers(resData.answers);
-        setQuestionAnswers(resData.assignment.worksheet.questionAnswers);
+        // setStudentAnswers(resData.answers);
+        setQuestionAnswers(resData.score.questionAnswers);
         setScoreId(resData.score._id);
         setWorksheet(resData.assignment.worksheet);
+
+        // const updatedShowPanels = {};
+        // const initialQuestionAnswers =
+        //   resData.assignment.worksheet.questionAnswers;
+        // Object.keys(initialQuestionAnswers).forEach((key) => {
+        //   if (
+        //     resData.answers[key].answer.toLowerCase() ===
+        //     [
+        //       key
+        //     ].answerKey.toLowerCase()
+        //   ) {
+        //     updatedShowPanels[key] = false;
+        //   } else {
+        //     updatedShowPanels[key] = true;
+        //   }
+        // });
+        // setShowPanels(updatedShowPanels);
       } catch (err) {
         console.log(err);
       }
@@ -97,7 +111,7 @@ const StudentWorksheet = () => {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                studentAnswers,
+                questionAnswers,
                 scoreId,
               }),
             }
@@ -110,34 +124,52 @@ const StudentWorksheet = () => {
       }
     };
     updateStudentAnswersOnServerHandler();
-  }, [studentAnswers, getAccessTokenSilently, scoreId]);
+  }, [questionAnswers, getAccessTokenSilently, scoreId]);
 
   const changeAnswerHandler = (event, key) => {
-    const updatedStudentAnswers = {
-      ...studentAnswers,
+    // const updatedShowPanels = { ...showPanels };
+
+    console.log(key, event.target.value);
+    const updatedQuestionAnswers = {
+      ...questionAnswers,
       [key]: {
+        ...questionAnswers[key],
         answerWasAttempted: true,
         answer: event.target.value,
       },
     };
-    setStudentAnswers(updatedStudentAnswers);
-    console.log(updatedStudentAnswers);
+
+    console.log(
+      updatedQuestionAnswers[key].answer,
+      questionAnswers[key].answerKey
+    );
+
+    if (
+      updatedQuestionAnswers[key].answer.toLowerCase() ===
+      questionAnswers[key].answerKey.toLowerCase()
+    ) {
+      updatedQuestionAnswers[key].showPanel = false;
+    } else {
+      updatedQuestionAnswers[key].showPanel = true;
+    }
+
+    // setShowPanels(updatedShowPanels);
+    setQuestionAnswers(updatedQuestionAnswers);
   };
 
   let showWorksheet = (
     <ActiveStudentWorksheet
       mainImageUrl={worksheet.mainImageUrl}
       panelImageUrl={worksheet.panelImageUrl}
-      showPanels={showPanels}
+      questionAnswers={questionAnswers}
     >
       {Object.keys(questionAnswers).map((questionAnswerKey, index) => {
         return (
           <StudentQuestionAnswer
             key={questionAnswerKey}
-            activeQuestionAnswer={questionAnswers[questionAnswerKey]}
+            questionAnswer={questionAnswers[questionAnswerKey]}
             changeAnswerHandler={changeAnswerHandler}
-            activeQuestionAnswerKey={questionAnswerKey}
-            studentAnswer={studentAnswers[questionAnswerKey]}
+            questionAnswerKey={questionAnswerKey}
           />
         );
       })}

@@ -3,30 +3,27 @@ import { Box, Input } from "@chakra-ui/core";
 import classes from "./StudentQuestionAnswer.module.css";
 
 const StudentQuestionAnswer = ({
-  activeQuestionAnswerKey,
-  activeQuestionAnswer,
+  questionAnswerKey,
+  questionAnswer,
   changeAnswerHandler,
-  studentAnswer,
 }) => {
   let isInvalid =
-    studentAnswer.answerWasAttempted &&
-    studentAnswer.answer !== activeQuestionAnswer.answerKey &&
-    studentAnswer.answer !== "";
+    questionAnswer.answerWasAttempted &&
+    questionAnswer.answer !== questionAnswer.answerKey &&
+    questionAnswer.answer !== "";
 
   return (
     <>
       <Box className={classes.QuestionAnswer}>
-        <p className={classes.Question}>{activeQuestionAnswer.question}</p>
+        <p className={classes.Question}>{questionAnswer.question}</p>
         <Input
           isInvalid={isInvalid}
           placeholder="answer"
           className={classes.Answer}
           errorBorderColor="crimson"
           type="text"
-          value={studentAnswer.answer}
-          onChange={(event) =>
-            changeAnswerHandler(event, activeQuestionAnswerKey)
-          }
+          value={questionAnswer.answer}
+          onChange={(event) => changeAnswerHandler(event, questionAnswerKey)}
         />
       </Box>
       <hr />

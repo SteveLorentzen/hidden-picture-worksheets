@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import classes from "./Assignment.module.css";
-import { Box, Heading } from "@chakra-ui/core";
+import { Box, Heading, Button } from "@chakra-ui/core";
 import { format } from "date-fns";
 
 const Assignment = ({
@@ -9,7 +9,8 @@ const Assignment = ({
   createdAt,
   dueDate,
   classroomName,
-  students,
+  scores,
+  deleteAssignmentHandler,
 }) => {
   const [studentDataIsShowing, setStudentDataIsShowing] = useState(false);
 
@@ -25,11 +26,11 @@ const Assignment = ({
         </Heading>
         <Box className={classes.WorksheetName}>
           <Heading as="h2" size="md">
-            worksheet: {worksheetName}
+            Worksheet: {worksheetName}
           </Heading>
           <Heading as="h2" size="md">
-            classroom: {classroomName} ({students.length}{" "}
-            {students.length === 1 ? "student" : "students"})
+            Classroom: {classroomName} ({scores.length}{" "}
+            {scores.length === 1 ? "student" : "students"})
           </Heading>
         </Box>
 
@@ -45,17 +46,40 @@ const Assignment = ({
       {studentDataIsShowing ? (
         <Box>
           <Heading as="h2" size="lg">
-            Student Report
+            Student Progress
           </Heading>
-          {students.map((student) => {
-            return (
-              <div key={student._id}>
-                {student.name} <strong>0% progress</strong>
-              </div>
-            );
-          })}
+          <Box className={classes.StudentProgressBox}>
+            {scores.map((score) => {
+              let correctCount = 0;
+
+              Object.keys(score.questionAnswers).forEach((key) => {
+                if (
+                  score.questionAnswers[key].answer ===
+                  score.questionAnswers[key].answerKey
+                ) {
+                  correctCount++;
+                }
+              });
+
+              return (
+                <div key={score.student._id} className={classes.Report}>
+                  {score.student.name}{" "}
+                  <strong>
+                    {Math.round((correctCount / score.questionNumber) * 100)}%
+                    done
+                  </strong>
+                </div>
+              );
+            })}
+          </Box>
         </Box>
       ) : null}
+      <Button
+        variant="outline"
+        onClick={(event) => deleteAssignmentHandler(event)}
+      >
+        Delete
+      </Button>
     </Box>
   );
 };

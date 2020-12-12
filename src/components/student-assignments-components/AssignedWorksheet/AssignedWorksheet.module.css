@@ -16,6 +16,20 @@
   transform: scale(1.05);
 }
 
+.Completed {
+  background-color: rgb(201, 253, 201);
+}
+
+.CompletedTag {
+  color: green;
+  font-weight: bolder;
+  margin-left: 10px;
+}
+
+.CompletedCheckmark {
+  color: green;
+}
+
 .WorksheetTitle {
 }
 

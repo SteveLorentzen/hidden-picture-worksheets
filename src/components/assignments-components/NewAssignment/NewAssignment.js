@@ -3,7 +3,7 @@ import { Box, Input, Heading, Button, Select } from "@chakra-ui/core";
 import classes from "./NewAssignment.module.css";
 import { useAuth0 } from "@auth0/auth0-react";
 
-const NewAssignment = ({ closeModalHandler }) => {
+const NewAssignment = ({ closeModalHandler, newAssignmentHandler }) => {
   const [newAssignmentInput, setNewAssignmentInput] = useState({
     assignmentName: "",
     worksheet: "",
@@ -36,30 +36,6 @@ const NewAssignment = ({ closeModalHandler }) => {
     };
     getAssignmentData();
   }, [getAccessTokenSilently]);
-
-  const newAssignmentHandler = async () => {
-    try {
-      const token = await getAccessTokenSilently();
-      const result = await fetch("http://localhost:8080/create-assignment", {
-        method: "post",
-        headers: {
-          Authorization: "bearer " + token,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          assignmentName: newAssignmentInput.assignmentName,
-          worksheet: newAssignmentInput.worksheet,
-          classroomAssigned: newAssignmentInput.classroomAssigned,
-          dueDate: newAssignmentInput.dueDate,
-        }),
-      });
-      const resData = await result.json();
-      console.log(resData);
-      closeModalHandler();
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   const inputHandler = (event) => {
     setNewAssignmentInput({
@@ -135,17 +111,11 @@ const NewAssignment = ({ closeModalHandler }) => {
           <Button
             variant="outline"
             className={classes.AssignButton}
-            onClick={newAssignmentHandler}
+            onClick={() => newAssignmentHandler(newAssignmentInput)}
           >
             Assign!
           </Button>
         </Box>
-      </Box>
-      <Box>
-        <p>{newAssignmentInput.assignmentName}</p>
-        <p>{newAssignmentInput.worksheet}</p>
-        <p>{newAssignmentInput.classroomAssigned}</p>
-        <p>{newAssignmentInput.dueDate}</p>
       </Box>
     </>
   );

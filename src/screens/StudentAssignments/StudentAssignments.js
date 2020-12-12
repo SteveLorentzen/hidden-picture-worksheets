@@ -7,7 +7,7 @@ import AssignedWorksheet from "../../components/student-assignments-components/A
 import { Spinner, Box, Heading } from "@chakra-ui/core";
 
 const StudentAssignments = () => {
-  const [assignments, setAssignments] = useState([]);
+  const [scores, setScores] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -28,7 +28,7 @@ const StudentAssignments = () => {
         );
         const resData = await result.json();
         console.log(resData);
-        setAssignments(resData.assignedWorksheets);
+        setScores(resData.scores);
         setIsLoading(false);
       } catch (err) {
         console.log(err);
@@ -55,17 +55,18 @@ const StudentAssignments = () => {
         </Box>
       ) : (
         <Box display="flex" flexWrap="wrap" justifyContent="space-between">
-          {assignments.map((assignment) => {
+          {scores.map((score) => {
             return (
               <Link
-                key={assignment._id}
-                to={"/student-worksheet/" + assignment._id}
+                key={score.assignment._id}
+                to={"/student-worksheet/" + score.assignment._id}
                 className={classes.Link}
               >
                 <AssignedWorksheet
-                  worksheetName={assignment.worksheet.worksheetName}
-                  dueDate={assignment.dueDate}
-                  panelNumber={assignment.worksheet.panelNumber}
+                  worksheetName={score.assignment.worksheet.worksheetName}
+                  dueDate={score.assignment.dueDate}
+                  panelNumber={score.assignment.worksheet.panelNumber}
+                  questionAnswers={score.questionAnswers}
                 />
               </Link>
             );

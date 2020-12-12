@@ -6,7 +6,7 @@ import ActiveWorksheet from "../../components/worksheet-creator-components/Activ
 import DeleteCheck from "../../components/worksheet-creator-components/DeleteCheck/DeleteCheck";
 import QuestionWizard from "../../components/worksheet-creator-components/QuestionWizard/QuestionWizard";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Spinner, Heading } from "@chakra-ui/core";
+import { Spinner, Heading, Box } from "@chakra-ui/core";
 import Header from "../../components/common-components/Header/Header";
 import SpinnerCustom from "../../components/UI/SpinnerCustom/SpinnerCustom";
 import TeacherControls from "../../components/worksheet-creator-components/TeacherControls/TeacherControls";
@@ -307,6 +307,34 @@ const WorksheetCreator = (props) => {
           )}
         </div>
       </Header>
+
+      {activeWorksheet ? null : (
+        <Box className={classes.WelcomeBox}>
+          <Heading as="h1" size="xl" margin="15px">
+            Welcome!
+          </Heading>
+          <Heading as="h2" size="md">
+            Open the worksheet menu in the top left corner to{" "}
+            <strong className={classes.Accent}>select</strong> or{" "}
+            <strong className={classes.Accent}>create</strong> a worksheet.
+          </Heading>
+          {worksheetMenuIsLoading ? (
+            <Spinner />
+          ) : (
+            worksheetNames.map((worksheet) => {
+              return (
+                <div
+                  key={worksheet._id}
+                  className={classes.WorksheetName}
+                  onClick={() => openWorksheetHandler(worksheet._id)}
+                >
+                  <h5>{worksheet.worksheetName}</h5>
+                </div>
+              );
+            })
+          )}
+        </Box>
+      )}
 
       {showActiveWorksheet}
 

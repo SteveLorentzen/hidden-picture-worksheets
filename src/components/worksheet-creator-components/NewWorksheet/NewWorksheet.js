@@ -62,11 +62,23 @@ const NewWorksheet = ({
       }
       setTimedMessage({ message, showing: true });
       setTimeout(() => setTimedMessage({ message: "", showing: false }), 1500);
-      openWorksheetHandler(resData.worksheet._id);
+      // openWorksheetHandler(resData.worksheet._id);
     } catch (err) {
       console.log(err);
     }
   };
+
+  let mainImageUrlInputIsDisabled = false;
+
+  if (mainImage.length > 0) {
+    mainImageUrlInputIsDisabled = true;
+  }
+
+  let mainImageInputIsDisabled = false;
+
+  if (mainImageUrl !== "") {
+    mainImageInputIsDisabled = true;
+  }
 
   return (
     <>
@@ -159,10 +171,18 @@ const NewWorksheet = ({
 
       <div className={classes.mainImageContainer}>
         <div className={classes.InputContainer}>
-          <label className={classes.Label} htmlFor="main-image-url">
+          <label
+            className={
+              mainImageUrlInputIsDisabled
+                ? classes.DisabledLabel
+                : classes.Label
+            }
+            htmlFor="main-image-url"
+          >
             Main Image Url:
           </label>
           <Input
+            isDisabled={mainImageUrlInputIsDisabled}
             variant="flushed"
             type="text"
             name="main-image-url"
@@ -181,8 +201,12 @@ const NewWorksheet = ({
             variant="flushed"
             type="file"
             onChange={(event) => setMainImage(event.target.files)}
+            isDisabled={mainImageInputIsDisabled}
           />
         </div>
+        <p>
+          <strong>(Either option is available when inputs are empty)</strong>
+        </p>
       </div>
 
       <div className={classes.mainImageContainer}>

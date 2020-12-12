@@ -36,3 +36,12 @@
 .DateBox {
   width: 33.3%;
 }
+
+.StudentProgressBox {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.Report {
+  margin: 0 10px;
+}

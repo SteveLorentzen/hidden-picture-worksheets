@@ -42,6 +42,13 @@
   font-weight: bold;
 }
 
+.DisabledLabel {
+  width: 150px;
+  min-width: 150px;
+  color: grey;
+  font-weight: bold;
+}
+
 .ButtonBox {
   display: flex;
   justify-content: space-evenly;
