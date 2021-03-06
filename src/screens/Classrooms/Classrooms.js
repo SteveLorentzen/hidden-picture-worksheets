@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Button, Box, Input, Heading, Spinner } from "@chakra-ui/core";
 import Header from "../../components/common-components/Header/Header";
 import classes from "./Classrooms.module.css";
-import { useAuth0 } from "@auth0/auth0-react";
 import ClassroomPreview from "../../components/classrooms-components/ClassroomPreview/ClassroomPreview";
 import Classroom from "../../components/classrooms-components/Classroom/Classroom";
 import Modal from "../../components/UI/Modal/Modal";
+import axios from "axios";
 
 const Classrooms = () => {
   const [classroomInput, setClassroomInput] = useState({
@@ -22,8 +22,6 @@ const Classrooms = () => {
 
   const [activeClassroom, setActiveClassroom] = useState({});
 
-  const { getAccessTokenSilently } = useAuth0();
-
   const [deleting, setDeleting] = useState(false);
 
   const [codeToDisplay, setCodeToDisplay] = useState({ code: "", name: "" });
@@ -31,23 +29,21 @@ const Classrooms = () => {
   const [classroomToDeleteId, setClassroomToDeleteId] = useState("");
 
   useEffect(() => {
+    let mounted = true;
     const getClassrooms = async () => {
       try {
-        const token = await getAccessTokenSilently();
-        const result = await fetch("http://localhost:8080/get-classrooms", {
-          headers: {
-            Authorization: "bearer " + token,
-          },
-        });
-        const resData = await result.json();
-        console.log(resData);
-        setClassrooms(resData.classrooms);
+        const result = await axios.get("/get-classrooms");
+        console.log(result);
+        if (mounted) {
+          setClassrooms(result.data.classrooms);
+        }
       } catch (err) {
         console.log(err);
       }
     };
     getClassrooms();
-  }, [getAccessTokenSilently]);
+    return () => (mounted = false);
+  }, []);
 
   const inputHandler = (event) => {
     setClassroomInput({
@@ -58,21 +54,14 @@ const Classrooms = () => {
 
   const createClassroomHandler = async () => {
     try {
-      const token = await getAccessTokenSilently();
-      const result = await fetch("http://localhost:8080/create-classroom", {
-        method: "post",
-        headers: {
-          Authorization: "bearer " + token,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      const result = await axios.post("/create-classroom", {
+        data: {
           name: classroomInput.name,
-        }),
+        },
       });
-      const resData = await result.json();
-      console.log(resData);
+      console.log(result);
       const updatedClassrooms = [...classrooms];
-      updatedClassrooms.push(resData.classroom);
+      updatedClassrooms.push(result.data.classroom);
       setClassrooms(updatedClassrooms);
       setModalIsOpen({ ...modalIsOpen, newClassroom: false });
     } catch (err) {
@@ -101,22 +90,15 @@ const Classrooms = () => {
     }
     setDeleting(true);
     try {
-      const token = await getAccessTokenSilently();
-      const result = await fetch("http://localhost:8080/delete-classroom", {
-        method: "delete",
-        body: JSON.stringify({
+      const result = await axios.delete("/delete-classroom", {
+        data: {
           classroomId: classroomToDeleteId,
-        }),
-        headers: {
-          Authorization: "bearer " + token,
-          "Content-Type": "application/json",
         },
       });
-      const resData = await result.json();
-      console.log(resData);
+      console.log(result);
       setClassrooms(
         classrooms.filter((classroom) => {
-          return classroom._id !== resData.classroomId;
+          return classroom._id !== result.data.classroomId;
         })
       );
     } catch (err) {
@@ -133,7 +115,6 @@ const Classrooms = () => {
         <Button
           onClick={() => setModalIsOpen({ ...modalIsOpen, newClassroom: true })}
           variant="outline"
-          variantColor="teal"
         >
           Create New Classroom
         </Button>
@@ -169,7 +150,13 @@ const Classrooms = () => {
           classroomCode={activeClassroom.code}
           classroomId={activeClassroom._id}
         />
-      ) : null}
+      ) : (
+        <Box className={classes.PromptBox}>
+          <Heading as="h2" className={classes.Prompt}>
+            Select a classroom!
+          </Heading>
+        </Box>
+      )}
       {classroomToDeleteId !== "" ? (
         <Modal
           closeModalHandler={() => setClassroomToDeleteId("")}
@@ -241,8 +228,7 @@ const Classrooms = () => {
             </Heading>
             <h2 className={classes.Code}>{codeToDisplay.code}</h2>
             <Button
-              variant="outline"
-              variantColor="teal"
+              variant="solid"
               onClick={() => setCodeToDisplay({ code: "", name: "" })}
             >
               Close

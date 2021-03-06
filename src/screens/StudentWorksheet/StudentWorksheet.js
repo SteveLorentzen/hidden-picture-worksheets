@@ -1,23 +1,67 @@
 import * as React from "react";
-import { useAuth0 } from "@auth0/auth0-react";
-import { useParams } from "react-router-dom";
-import { Spinner, Box } from "@chakra-ui/core";
+import { useParams, useHistory } from "react-router-dom";
+import { Spinner, Box, Heading, Button } from "@chakra-ui/core";
 import ActiveStudentWorksheet from "../../components/student-worksheet-components/ActiveStudentWorksheet/ActiveStudentWorksheet";
 import StudentQuestionAnswer from "../../components/student-worksheet-components/StudentQuestionAnswer/StudentQuestionAnswer";
 import StudentHeader from "../../components/common-components/StudentHeader/StudentHeader";
+import axios from "axios";
+import classes from "./StudentWorksheet.module.css";
+import Modal from "../../components/UI/Modal/Modal";
+import SuccessMessage from "./SuccessMessage/SuccessMessage";
 
 const StudentWorksheet = () => {
   const [worksheet, setWorksheet] = React.useState({});
 
   const [questionAnswers, setQuestionAnswers] = React.useState({});
 
+  const [messageTimeout, setMessageTimeout] = React.useState(null);
+
+  const [saveTimeout, setSaveTimeout] = React.useState(null);
+
+  const [errorTimeout, setErrorTimeout] = React.useState(null);
+
   const [scoreId, setScoreId] = React.useState("");
 
   const [worksheetIsLoading, setWorksheetIsLoading] = React.useState(false);
 
+  const [updatingMessage, setUpdatingMessage] = React.useState({
+    message: "",
+    err: false,
+  });
+
+  const [worksheetIsComplete, setWorksheetIsComplete] = React.useState(false);
+
+  const [successModalIsOpen, setSuccessModalIsOpen] = React.useState(false);
+
+  const [isLateModalIsOpen, setIsLateModalIsOpen] = React.useState(false);
+
   const { assignmentId } = useParams();
 
-  const { getAccessTokenSilently } = useAuth0();
+  const history = useHistory();
+
+  React.useEffect(() => {
+    console.log("effect");
+    let correctAnswerCount = 0;
+    for (let i = 1; i <= Object.keys(questionAnswers).length; i++) {
+      if (
+        questionAnswers["question" + i].answer ===
+        questionAnswers["question" + i].answerKey
+      ) {
+        correctAnswerCount++;
+      } else {
+        setWorksheetIsComplete(false);
+        setSuccessModalIsOpen(false);
+        return;
+      }
+    }
+    if (
+      questionAnswers["question1"] &&
+      correctAnswerCount === Object.keys(questionAnswers).length
+    ) {
+      setWorksheetIsComplete(true);
+      setSuccessModalIsOpen(true);
+    }
+  }, [questionAnswers]);
 
   // React.useEffect(() => {
   //   console.log("i ran!");
@@ -41,95 +85,65 @@ const StudentWorksheet = () => {
     const getWorksheet = async (assignmentId) => {
       setWorksheetIsLoading(true);
       try {
-        const token = await getAccessTokenSilently();
-        const result = await fetch(
-          "http://localhost:8080/student-worksheet/" + assignmentId,
-          {
-            headers: {
-              Authorization: "bearer " + token,
-            },
-          }
-        );
-        const resData = await result.json();
-        // const questionAnswers = resData.assignment.worksheet.questionAnswers;
-        // const studentAnswers = resData.answers;
-        // const updatedQuestionAnswers = {};
-        // for (let i = 1; i <= Object.keys(questionAnswers).length; i++) {
-        //   updatedQuestionAnswers["question" + i] = {
-        //     ...questionAnswers["question" + i],
-        //     answer: studentAnswers["question" + i].answer,
-        //     answerWasAttempted: studentAnswers["question" + i].answerWasAttempted,
-        //   };
-        // }
-        // console.log(questionAnswers, studentAnswers, updatedQuestionAnswers);
-        // const newWorksheet = {
-        //   questionAnswers: resData.assignment.worksheet.questionAnswers,
-        //   studentAnswers: resData.answers,
-        // };
-        console.log(resData);
-        // setStudentAnswers(resData.answers);
-        setQuestionAnswers(resData.score.questionAnswers);
-        setScoreId(resData.score._id);
-        setWorksheet(resData.assignment.worksheet);
+        const result = await axios.get("/student-worksheet/" + assignmentId);
 
-        // const updatedShowPanels = {};
-        // const initialQuestionAnswers =
-        //   resData.assignment.worksheet.questionAnswers;
-        // Object.keys(initialQuestionAnswers).forEach((key) => {
-        //   if (
-        //     resData.answers[key].answer.toLowerCase() ===
-        //     [
-        //       key
-        //     ].answerKey.toLowerCase()
-        //   ) {
-        //     updatedShowPanels[key] = false;
-        //   } else {
-        //     updatedShowPanels[key] = true;
-        //   }
-        // });
-        // setShowPanels(updatedShowPanels);
+        console.log(result);
+        setQuestionAnswers(result.data.score.questionAnswers);
+        setScoreId(result.data.score._id);
+        setWorksheet(result.data.assignment.worksheet);
       } catch (err) {
         console.log(err);
       }
       setWorksheetIsLoading(false);
     };
     getWorksheet(assignmentId);
-  }, [getAccessTokenSilently, assignmentId]);
+  }, [assignmentId]);
 
-  React.useEffect(() => {
-    const updateStudentAnswersOnServerHandler = async () => {
-      console.log("updating!");
-      if (scoreId) {
-        try {
-          const token = await getAccessTokenSilently();
-          const result = await fetch(
-            "http://localhost:8080/update-student-answers",
-            {
-              method: "put",
-              headers: {
-                Authorization: "bearer " + token,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                questionAnswers,
-                scoreId,
-              }),
-            }
-          );
-          const resData = await result.json();
-          console.log(resData);
-        } catch (err) {
-          console.log(err);
+  const updateStudentAnswersOnServerHandler = async (
+    updatedQuestionAnswers
+  ) => {
+    console.log("updating!");
+    setUpdatingMessage({ message: "Saving answers...", isError: false });
+    if (scoreId) {
+      try {
+        const result = await axios.put("/update-student-answers", {
+          data: {
+            questionAnswers: updatedQuestionAnswers,
+            scoreId,
+          },
+        });
+        console.log(result);
+        if (result.data.isLate) {
+          setIsLateModalIsOpen(true);
         }
+        setUpdatingMessage({ message: result.data.message, isError: false });
+
+        setMessageTimeout(
+          setTimeout(() => {
+            setUpdatingMessage({ message: "", isError: false });
+          }, 2000)
+        );
+      } catch (err) {
+        console.log(err);
+        setUpdatingMessage({
+          message: err.message + ": answers not saved :(  Try again later",
+          isError: true,
+        });
+        setErrorTimeout(
+          setTimeout(() => {
+            setUpdatingMessage({ message: "", isError: true });
+          }, 4000)
+        );
       }
-    };
-    updateStudentAnswersOnServerHandler();
-  }, [questionAnswers, getAccessTokenSilently, scoreId]);
+    }
+  };
 
   const changeAnswerHandler = (event, key) => {
-    // const updatedShowPanels = { ...showPanels };
+    //cleanup from any previous timeouts that have yet to execute
+    clearTimeout(saveTimeout);
+    clearTimeout(messageTimeout);
+    clearTimeout(errorTimeout);
 
-    console.log(key, event.target.value);
     const updatedQuestionAnswers = {
       ...questionAnswers,
       [key]: {
@@ -138,12 +152,6 @@ const StudentWorksheet = () => {
         answer: event.target.value,
       },
     };
-
-    console.log(
-      updatedQuestionAnswers[key].answer,
-      questionAnswers[key].answerKey
-    );
-
     if (
       updatedQuestionAnswers[key].answer.toLowerCase() ===
       questionAnswers[key].answerKey.toLowerCase()
@@ -153,8 +161,16 @@ const StudentWorksheet = () => {
       updatedQuestionAnswers[key].showPanel = true;
     }
 
-    // setShowPanels(updatedShowPanels);
     setQuestionAnswers(updatedQuestionAnswers);
+    setSaveTimeout(
+      setTimeout(() => {
+        updateStudentAnswersOnServerHandler(updatedQuestionAnswers);
+      }, 1000)
+    );
+  };
+
+  const returnHandler = () => {
+    history.push("/");
   };
 
   let showWorksheet = (
@@ -170,6 +186,7 @@ const StudentWorksheet = () => {
             questionAnswer={questionAnswers[questionAnswerKey]}
             changeAnswerHandler={changeAnswerHandler}
             questionAnswerKey={questionAnswerKey}
+            isDisabled={worksheetIsComplete}
           />
         );
       })}
@@ -188,6 +205,41 @@ const StudentWorksheet = () => {
     <>
       <StudentHeader isHeaderForStudentWorksheet />
       {showWorksheet}
+      {updatingMessage.message ? (
+        <div
+          className={
+            updatingMessage.isError
+              ? [classes.Message, classes.ErrorMessage].join(" ")
+              : classes.Message
+          }
+        >
+          {updatingMessage.message}
+        </div>
+      ) : null}
+      {worksheetIsComplete ? (
+        <div className={classes.CompleteMessage}>
+          This <strong className={classes.Accent}>worksheet</strong> is
+          complete. Well done!
+        </div>
+      ) : null}
+      {successModalIsOpen ? (
+        <Modal
+          closeModalHandler={() => setSuccessModalIsOpen(false)}
+          size="small"
+        >
+          <SuccessMessage
+            closeModalHandler={() => setSuccessModalIsOpen(false)}
+          />
+        </Modal>
+      ) : null}
+      {isLateModalIsOpen ? (
+        <Modal closeModalHandler={returnHandler} size="small">
+          <Heading as="h2">
+            Sorry, this worksheet is no longer available
+          </Heading>
+          <Button onClick={returnHandler}>Return to Assignments</Button>
+        </Modal>
+      ) : null}
     </>
   );
 };

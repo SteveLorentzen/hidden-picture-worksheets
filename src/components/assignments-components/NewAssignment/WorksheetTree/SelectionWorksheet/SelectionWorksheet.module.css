@@ -1,0 +1,25 @@
+.WorksheetName {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+  font-weight: bold;
+  width: 200px;
+}
+
+.WorksheetName:hover {
+  cursor: pointer;
+  /* width: 96%; */
+  background-color: rgb(252, 230, 227);
+  transform: scale(1.1);
+  /* border: 1px solid black; */
+  border-radius: 5px;
+}
+
+.Selected {
+  background-color: rgb(255, 207, 200);
+}
+
+.Selected:hover {
+  background-color: rgb(255, 207, 200);
+}

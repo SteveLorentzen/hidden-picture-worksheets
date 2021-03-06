@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Heading, Box, Spinner } from "@chakra-ui/core";
 import Student from "../Student/Student";
+import classes from "./Classroom.module.css";
 
 const Classroom = ({ classroomName, classroomCode, classroomId }) => {
   //   const [studentEmail, setStudentEmail] = useState("");
@@ -15,6 +16,7 @@ const Classroom = ({ classroomName, classroomCode, classroomId }) => {
   const { getAccessTokenSilently } = useAuth0();
 
   useEffect(() => {
+    setIsLoading(true);
     const getStudents = async () => {
       try {
         const token = await getAccessTokenSilently();
@@ -28,6 +30,7 @@ const Classroom = ({ classroomName, classroomCode, classroomId }) => {
         );
         const resData = await result.json();
         setStudents(resData.students);
+        setIsLoading(false);
       } catch (err) {
         console.log(err);
       }
@@ -84,7 +87,39 @@ const Classroom = ({ classroomName, classroomCode, classroomId }) => {
     <>
       <Box textAlign="center" margin="30px">
         <Box>
-          <Heading as="h2">Students in {classroomName}:</Heading>
+          {students.length < 1 && !isLoading ? (
+            <Box className={classes.Classroom}>
+              <Heading as="h2">
+                There are no students in{" "}
+                <strong className={classes.Accent}>{classroomName}</strong> yet.
+              </Heading>
+              <Box className={classes.Instructions}>
+                <Box className={classes.SendMessage}>
+                  <Heading as="h3" size="md">
+                    Give your students the classroom code:{" "}
+                  </Heading>
+                  <Heading as="h2" className={classes.Code}>
+                    {classroomCode}
+                  </Heading>
+                </Box>
+                <Box className={classes.EnterInstructions}>
+                  <Heading as="h3" size="md" className={classes.Enter}>
+                    {" "}
+                    Have them enter it at
+                  </Heading>
+                  <Heading as="h3" size="md" className={classes.Url}>
+                    {" "}
+                    HiddenPictureWorksheets.com/join
+                  </Heading>
+                </Box>
+              </Box>
+            </Box>
+          ) : (
+            <Heading as="h2">
+              Students in{" "}
+              <strong className={classes.Accent}>{classroomName}</strong>:
+            </Heading>
+          )}
           <Box h="25px">{isLoading ? <Spinner size="sm" /> : null}</Box>
         </Box>
 

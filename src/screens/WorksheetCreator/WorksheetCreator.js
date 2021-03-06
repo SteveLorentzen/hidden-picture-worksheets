@@ -1,58 +1,35 @@
 import React, { useState, useEffect } from "react";
-import classes from "./WorksheetCreator.module.css";
-import Modal from "../../components/UI/Modal/Modal";
-import NewWorksheet from "../../components/worksheet-creator-components/NewWorksheet/NewWorksheet";
 import ActiveWorksheet from "../../components/worksheet-creator-components/ActiveWorksheet/ActiveWorksheet";
-import DeleteCheck from "../../components/worksheet-creator-components/DeleteCheck/DeleteCheck";
-import QuestionWizard from "../../components/worksheet-creator-components/QuestionWizard/QuestionWizard";
-import { useAuth0 } from "@auth0/auth0-react";
-import { Spinner, Heading, Box } from "@chakra-ui/core";
 import Header from "../../components/common-components/Header/Header";
 import SpinnerCustom from "../../components/UI/SpinnerCustom/SpinnerCustom";
+import TimedMessage from "../../components/worksheet-creator-components/TimedMessage/TimedMessage";
+import WelcomeMessage from "../../components/worksheet-creator-components/WelcomeMessage/WelcomeMessage";
 import TeacherControls from "../../components/worksheet-creator-components/TeacherControls/TeacherControls";
-import ShareWorksheet from "../../components/worksheet-creator-components/ShareWorksheet/ShareWorksheet";
-import ControlsToggle from "../../components/worksheet-creator-components/ControlsToggle/ControlsToggle";
+import axios from "axios";
+import Modal from "../../components/UI/Modal/Modal";
+import AcceptSharedWorksheet from "../../components/worksheet-creator-components/AcceptSharedWorksheet/AcceptSharedWorksheet";
 
 const WorksheetCreator = (props) => {
-  const [worksheetNames, setWorksheetNames] = useState([]);
-
   const [activeWorksheet, setActiveWorksheet] = useState(null);
 
   const [activeQuestionAnswers, setActiveQuestionAnswers] = useState({});
 
   const [showPanels, setShowPanels] = useState({});
 
-  const [modalIsOpen, setModalIsOpen] = useState({
-    newWorksheet: false,
-    deleteCheck: false,
-    worksheetEditor: false,
-    questionGenerator: false,
-    shareWorksheet: false,
-  });
-
   const [worksheetIsLoading, setWorksheetIsLoading] = useState(false);
 
-  const [controlsAreOpen, setControlsAreOpen] = useState(true);
-
   const [editorIsOpen, setEditorIsOpen] = useState(false);
+
+  const [acceptWorksheetModalIsOpen, setAcceptWorksheetModalIsOpen] = useState(
+    false
+  );
+
+  const [sharedWorksheetMessage, setSharedWorksheetMessage] = useState("");
 
   const [timedMessage, setTimedMessage] = useState({
     showing: true,
     message: "",
   });
-
-  const [worksheetMenuIsLoading, setWorksheetMenuIsLoading] = useState(false);
-
-  const [drawerIsOpen, setDrawerIsOpen] = useState(false);
-
-  //   const [classroomCode, setClassroomCode] = useState("");
-
-  const { getAccessTokenSilently, user } = useAuth0();
-
-  let isTeacher = false;
-  if (user) {
-    isTeacher = user["https://hiddenpicturetest.com/roles"].includes("teacher");
-  }
 
   useEffect(() => {
     const updatedShowPanels = {};
@@ -72,7 +49,6 @@ const WorksheetCreator = (props) => {
   useEffect(() => {
     let worksheetId = null;
     if (localStorage.getItem("worksheetId")) {
-      console.log("yeah boyee");
       worksheetId = localStorage.getItem("worksheetId");
       localStorage.removeItem("worksheetId");
     } else {
@@ -80,29 +56,12 @@ const WorksheetCreator = (props) => {
     }
     const addSharedWorksheetToUser = async () => {
       try {
-        const token = await getAccessTokenSilently();
-        const result = await fetch(
-          "http://localhost:8080/accept-shared-worksheet",
-          {
-            method: "post",
-            headers: {
-              Authorization: "bearer " + token,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              worksheetId,
-            }),
-          }
-        );
-        const resData = await result.json();
-        console.log(resData);
-        setTimedMessage({
-          showing: true,
-          message: resData.message,
+        const result = await axios.post("/accept-shared-worksheet", {
+          data: { worksheetId },
         });
-        setTimeout(() => {
-          setTimedMessage({ showing: false, message: "" });
-        }, 4500);
+        console.log(result);
+        setSharedWorksheetMessage(result.data.message);
+        setAcceptWorksheetModalIsOpen(true);
       } catch (err) {
         console.log(err);
       }
@@ -110,67 +69,23 @@ const WorksheetCreator = (props) => {
     if (worksheetId) {
       addSharedWorksheetToUser();
     }
-  }, [getAccessTokenSilently]);
-
-  const setWorksheets = async () => {
-    setWorksheetMenuIsLoading(true);
-    const fetchWorksheets = async () => {
-      try {
-        const token = await getAccessTokenSilently();
-
-        const result = await fetch("http://localhost:8080/worksheets", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const resData = await result.json();
-        console.log(resData);
-        setWorksheetNames(resData.worksheetNames);
-        setWorksheetMenuIsLoading(false);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchWorksheets();
-  };
-
-  const closeModalHandler = () => {
-    setModalIsOpen({
-      newWorksheet: false,
-      deleteCheck: false,
-      worksheetEditor: false,
-      questionGenerator: false,
-    });
-  };
+  }, []);
 
   const openWorksheetHandler = async (id) => {
     setWorksheetIsLoading(true);
     try {
-      const token = await getAccessTokenSilently();
-      const result = await fetch("http://localhost:8080/worksheet/" + id, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const resData = await result.json();
-      // let mainImageUrl;
-      // if (resData.worksheet.mainImage) {
-      //   mainImageUrl = "http://localhost:8080/" + resData.worksheet.mainImage;
-      // } else {
-      //   mainImageUrl = resData.worksheet.mainImageUrl;
-      // }
+      const result = await axios.get("/worksheet/" + id);
+      console.log(result);
       setActiveWorksheet({
-        worksheetName: resData.worksheet.worksheetName,
-        mainImageUrl: resData.worksheet.mainImageUrl,
-        panelImageUrl: resData.worksheet.panelImageUrl,
-        worksheetId: resData.worksheet._id,
-        createdByUserId: "1",
-        panelNumber: resData.worksheet.panelNumber,
+        worksheetName: result.data.worksheet.worksheetName,
+        mainImageUrl: result.data.worksheet.mainImageUrl,
+        panelImageUrl: result.data.worksheet.panelImageUrl,
+        worksheetId: result.data.worksheet._id,
+        createdByUserId: result.data.worksheet.createdBy,
+        panelNumber: result.data.worksheet.panelNumber,
       });
-      console.log(resData);
-      setActiveQuestionAnswers(resData.worksheet.questionAnswers);
+      setActiveQuestionAnswers(result.data.worksheet.questionAnswers);
       setWorksheetIsLoading(false);
-      setDrawerIsOpen(false);
     } catch (err) {
       console.log(err);
     }
@@ -200,22 +115,15 @@ const WorksheetCreator = (props) => {
   const updateWorksheetHandler = async () => {
     setTimedMessage({ message: "Saving...", showing: true });
     try {
-      const token = await getAccessTokenSilently();
-      const res = await fetch("http://localhost:8080/update-worksheet", {
-        method: "PATCH",
-        body: JSON.stringify({
+      const result = await axios.patch("/update-worksheet", {
+        data: {
           worksheetId: activeWorksheet.worksheetId,
           questionAnswers: activeQuestionAnswers,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
       });
-      const resData = await res.json();
-      setTimedMessage({ showing: true, message: "Worksheet saved :)" });
+      setTimedMessage({ showing: true, message: result.data.message });
       setTimeout(() => setTimedMessage({ showing: false, message: "" }), 1500);
-      console.log(resData);
+      console.log(result);
     } catch (err) {
       console.log(err);
     }
@@ -228,33 +136,17 @@ const WorksheetCreator = (props) => {
   } else if (activeWorksheet && !worksheetIsLoading) {
     showActiveWorksheet = (
       <>
-        <ControlsToggle
-          controlsAreOpen={controlsAreOpen}
-          setControlsAreOpen={setControlsAreOpen}
+        <TeacherControls
+          updateWorksheetHandler={updateWorksheetHandler}
+          editorIsOpen={editorIsOpen}
+          setEditorIsOpen={() => setEditorIsOpen(!editorIsOpen)}
+          activeWorksheet={activeWorksheet}
+          setActiveWorksheet={setActiveWorksheet}
+          setTimedMessage={setTimedMessage}
+          activeQuestionAnswers={activeQuestionAnswers}
+          setActiveQuestionAnswers={setActiveQuestionAnswers}
         />
-        <div className={classes.ButtonBox}>
-          <TeacherControls
-            updateWorksheetHandler={updateWorksheetHandler}
-            deleteWorksheetModal={() =>
-              setModalIsOpen(() => ({ ...modalIsOpen, deleteCheck: true }))
-            }
-            editWorksheetModal={() =>
-              setModalIsOpen({ ...modalIsOpen, worksheetEditor: true })
-            }
-            openQuestionGeneratorModal={() =>
-              setModalIsOpen({ ...modalIsOpen, questionGenerator: true })
-            }
-            openNewWorksheetModal={() =>
-              setModalIsOpen({ ...modalIsOpen, newWorksheet: true })
-            }
-            openShareWorksheetModal={() =>
-              setModalIsOpen({ ...modalIsOpen, shareWorksheet: true })
-            }
-            editorIsOpen={editorIsOpen}
-            setEditorIsOpen={() => setEditorIsOpen(!editorIsOpen)}
-            controlsAreOpen={controlsAreOpen}
-          />
-        </div>
+
         <ActiveWorksheet
           activeQuestionAnswers={activeQuestionAnswers}
           changeQuestionAnswerHandler={changeQuestionAnswerHandler}
@@ -262,147 +154,40 @@ const WorksheetCreator = (props) => {
           showPanels={showPanels}
           mainImageUrl={activeWorksheet.mainImageUrl}
           panelImageUrl={activeWorksheet.panelImageUrl}
-          // updateWorksheetHandler={updateWorksheetHandler}
+          worksheetName={activeWorksheet.worksheetName}
         ></ActiveWorksheet>
       </>
     );
   }
 
-  const openDrawerHandler = () => {
-    setDrawerIsOpen(true);
-    setWorksheets();
-  };
-
   return (
     <>
       <Header
-        openNewWorksheetModal={() =>
-          setModalIsOpen({ ...modalIsOpen, newWorksheet: true })
-        }
-        openQuestionGeneratorModal={() =>
-          setModalIsOpen({ ...modalIsOpen, questionGenerator: true })
-        }
         activeWorksheetBool={activeWorksheet !== null}
-        isTeacher={isTeacher}
-        drawerIsOpen={drawerIsOpen}
-        setDrawerIsOpen={openDrawerHandler}
-        setDrawerIsClosed={() => setDrawerIsOpen(false)}
+        // isTeacher={isTeacher}
         isHeaderForWorksheetsPage
-      >
-        <div>
-          {worksheetMenuIsLoading ? (
-            <Spinner />
-          ) : (
-            worksheetNames.map((worksheet) => {
-              return (
-                <div
-                  key={worksheet._id}
-                  className={classes.WorksheetName}
-                  onClick={() => openWorksheetHandler(worksheet._id)}
-                >
-                  <h5>{worksheet.worksheetName}</h5>
-                </div>
-              );
-            })
-          )}
-        </div>
-      </Header>
+        openWorksheetHandler={openWorksheetHandler}
+        setTimedMessage={setTimedMessage}
+        activeWorksheet={activeWorksheet}
+        setActiveWorksheet={setActiveWorksheet}
+      />
 
       {activeWorksheet ? null : (
-        <Box className={classes.WelcomeBox}>
-          <Heading as="h1" size="xl" margin="15px">
-            Welcome!
-          </Heading>
-          <Heading as="h2" size="md">
-            Open the worksheet menu in the top left corner to{" "}
-            <strong className={classes.Accent}>select</strong> or{" "}
-            <strong className={classes.Accent}>create</strong> a worksheet.
-          </Heading>
-          {worksheetMenuIsLoading ? (
-            <Spinner />
-          ) : (
-            worksheetNames.map((worksheet) => {
-              return (
-                <div
-                  key={worksheet._id}
-                  className={classes.WorksheetName}
-                  onClick={() => openWorksheetHandler(worksheet._id)}
-                >
-                  <h5>{worksheet.worksheetName}</h5>
-                </div>
-              );
-            })
-          )}
-        </Box>
+        <WelcomeMessage openWorksheetHandler={openWorksheetHandler} />
       )}
 
       {showActiveWorksheet}
 
-      {modalIsOpen.newWorksheet ? (
-        <Modal closeModalHandler={closeModalHandler}>
-          <NewWorksheet
-            closeModalHandler={closeModalHandler}
-            token={props.token}
-            setTimedMessage={setTimedMessage}
+      <TimedMessage timedMessage={timedMessage} />
+
+      {acceptWorksheetModalIsOpen ? (
+        <Modal size="small">
+          <AcceptSharedWorksheet
+            sharedWorksheetMessage={sharedWorksheetMessage}
+            setAcceptWorksheetModalIsOpen={setAcceptWorksheetModalIsOpen}
           />
         </Modal>
       ) : null}
-      {modalIsOpen.deleteCheck ? (
-        <Modal closeModalHandler={closeModalHandler} size="small">
-          <DeleteCheck
-            closeModalHandler={closeModalHandler}
-            worksheetId={activeWorksheet.worksheetId}
-            setActiveWorksheet={setActiveWorksheet}
-            token={props.token}
-            setTimedMessage={setTimedMessage}
-          />
-        </Modal>
-      ) : null}
-      {modalIsOpen.worksheetEditor ? (
-        <Modal closeModalHandler={closeModalHandler}>
-          <NewWorksheet
-            closeModalHandler={closeModalHandler}
-            activeWorksheet={activeWorksheet}
-            openWorksheetHandler={openWorksheetHandler}
-            token={props.token}
-            setTimedMessage={setTimedMessage}
-          />
-        </Modal>
-      ) : null}
-      {modalIsOpen.questionGenerator ? (
-        <Modal closeModalHandler={closeModalHandler}>
-          <QuestionWizard
-            setTimedMessage={setTimedMessage}
-            closeModalHandler={closeModalHandler}
-            panelNumber={activeWorksheet.panelNumber}
-            activeQuestionAnswers={activeQuestionAnswers}
-            setActiveQuestionAnswers={setActiveQuestionAnswers}
-          />
-        </Modal>
-      ) : null}
-      {modalIsOpen.shareWorksheet ? (
-        <Modal closeModalHandler={closeModalHandler}>
-          <ShareWorksheet
-            closeModalHandler={closeModalHandler}
-            token={props.token}
-            setTimedMessage={setTimedMessage}
-            worksheetId={activeWorksheet.worksheetId}
-            worksheetName={activeWorksheet.worksheetName}
-          />
-        </Modal>
-      ) : null}
-      <div className={classes.TimedMessageBox}>
-        {timedMessage.showing ? (
-          <Heading
-            as="h6"
-            className={
-              timedMessage.err ? classes.TimedMessage : classes.TimedErrMessage
-            }
-          >
-            {timedMessage.message}
-          </Heading>
-        ) : null}
-      </div>
     </>
   );
 };

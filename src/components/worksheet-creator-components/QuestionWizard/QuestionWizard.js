@@ -209,7 +209,7 @@ const QuestionWizard = ({
 
   return (
     <>
-      <Heading as="h1" size="lg" marginBottom="20px" className={classes.Title}>
+      <Heading as="h1" size="xl" marginBottom="20px" className={classes.Title}>
         Question Wizard
       </Heading>
       <hr style={{ marginBottom: "15px" }} />
@@ -222,10 +222,10 @@ const QuestionWizard = ({
           textAlign: "center",
         }}
       >
-        <Heading className={classes.Teal} as="h2" size="md" minWidth="200px">
+        <Heading className={classes.Bold} as="h2" size="md" minWidth="200px">
           Question Range:
         </Heading>
-        <Heading className={classes.Teal} as="h4" size="sm" marginRight="10px">
+        <Heading className={classes.Bold} as="h4" size="sm" marginRight="10px">
           from
         </Heading>
         <Select
@@ -241,7 +241,7 @@ const QuestionWizard = ({
             );
           })}
         </Select>
-        <Heading className={classes.Teal} as="h4" size="sm" margin="0 10px">
+        <Heading className={classes.Bold} as="h4" size="sm" margin="0 10px">
           to
         </Heading>
         <Select
@@ -269,7 +269,7 @@ const QuestionWizard = ({
         margin="20px 20px 20px 0"
       >
         <Box display="flex" alignItems="center" justifyContent="center">
-          <Heading className={classes.Teal} as="h3" size="md" margin="10px">
+          <Heading className={classes.Bold} as="h3" size="md" margin="10px">
             First number:
           </Heading>
           <Heading as="h4" size="md">
@@ -289,7 +289,7 @@ const QuestionWizard = ({
             placeholder="Enter low limit"
             onChange={(event) => setOperand1Lower(+event.target.value)}
           ></Input>
-          <Heading className={classes.Teal} as="h4" size="sm" margin="0 30px">
+          <Heading className={classes.Bold} as="h4" size="sm" margin="0 30px">
             and
           </Heading>
           <Input
@@ -308,7 +308,7 @@ const QuestionWizard = ({
         margin="auto"
         width="75%"
       >
-        <Heading className={classes.Teal} as="h2" size="md" marginRight="20px">
+        <Heading className={classes.Bold} as="h2" size="md" marginRight="20px">
           Operation:
         </Heading>
         <Select
@@ -335,7 +335,7 @@ const QuestionWizard = ({
         margin="20px"
       >
         <Box display="flex" alignItems="center" justifyContent="center">
-          <Heading className={classes.Teal} as="h3" size="md" margin="10px">
+          <Heading className={classes.Bold} as="h3" size="md" margin="10px">
             Second number:
           </Heading>
           <Heading as="h4" size="md">
@@ -355,7 +355,7 @@ const QuestionWizard = ({
             placeholder="Enter low limit"
             onChange={(event) => setOperand2Lower(+event.target.value)}
           ></Input>
-          <Heading className={classes.Teal} as="h4" size="sm" margin="0 30px">
+          <Heading className={classes.Bold} as="h4" size="sm" margin="0 30px">
             and
           </Heading>
           <Input
@@ -382,7 +382,7 @@ const QuestionWizard = ({
               })
             }
           />
-          <label className={classes.Teal} htmlFor="allow-negatives">
+          <label className={classes.Bold} htmlFor="allow-negatives">
             Allow negative answers
           </label>
         </div>
@@ -427,7 +427,6 @@ const QuestionWizard = ({
         <Button
           margin="auto"
           variant="outline"
-          variantColor="teal"
           width="175px"
           onClick={() =>
             questionWizardHandler(

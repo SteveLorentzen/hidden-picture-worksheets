@@ -1,8 +1,8 @@
 import classes from "./DeleteCheck.module.css";
 import React from "react";
-import { useAuth0 } from "@auth0/auth0-react";
 import { Button, Box, Heading } from "@chakra-ui/core";
 import ButtonCustom from "../../UI/ButtonCustom/ButtonCustom";
+import axios from "axios";
 
 const DeleteCheck = ({
   setTimedMessage,
@@ -10,34 +10,26 @@ const DeleteCheck = ({
   worksheetId,
   setActiveWorksheet,
 }) => {
-  const { getAccessTokenSilently } = useAuth0();
-
   const deleteWorksheetHandler = async (worksheetId) => {
     setTimedMessage({ message: "deleting", showing: true });
     try {
-      const token = await getAccessTokenSilently();
       console.log(worksheetId);
-      const res = await fetch(
-        "http://localhost:8080/worksheet/" + worksheetId,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const resData = await res.json();
-      console.log(resData);
+      const result = await axios.delete("/worksheet/" + worksheetId);
+      console.log(result);
       closeModalHandler();
 
-      if (resData.err) {
-        setTimedMessage({ message: resData.message, showing: true, err: true });
+      if (result.data.err) {
+        setTimedMessage({
+          message: result.data.message,
+          showing: true,
+          err: true,
+        });
         setTimeout(
           () => setTimedMessage({ message: "", showing: false, err: false }),
           10000
         );
       } else {
-        setTimedMessage({ message: resData.message, showing: true });
+        setTimedMessage({ message: result.data.message, showing: true });
         setTimeout(
           () => setTimedMessage({ message: "", showing: false }),
           1500

@@ -32,7 +32,7 @@ const ClassroomPreview = ({
         {name}
       </Heading>
       <Box className={classes.IconBox}>
-        <Button variantColor="teal" variant="outline" onClick={openCodeModal}>
+        <Button className={classes.CodeButton} onClick={openCodeModal}>
           code: {code}
         </Button>
 

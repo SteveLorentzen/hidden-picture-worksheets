@@ -7,7 +7,6 @@ const ActiveStudentWorksheet = ({
   panelImageUrl,
   children,
 }) => {
-  console.log(mainImageUrl, panelImageUrl);
   return (
     <div className={classes.WorksheetContainer}>
       <div className={classes.QuestionAnswerContainer}>{children}</div>

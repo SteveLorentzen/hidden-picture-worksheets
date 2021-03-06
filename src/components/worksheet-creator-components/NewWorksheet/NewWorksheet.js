@@ -1,21 +1,24 @@
 import classes from "./NewWorksheet.module.css";
 import React, { useState, useEffect } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
 import { Box, Heading, Input, Select, Button } from "@chakra-ui/core";
+import Tag from "./Tag/Tag";
+import axios from "axios";
 
 const NewWorksheet = ({
   setTimedMessage,
   closeModalHandler,
   activeWorksheet,
   openWorksheetHandler,
+  selectedFolder,
+  // setWorksheetNames,
 }) => {
   const [worksheetName, setWorksheetName] = useState("");
   const [panelNumber, setPanelNumber] = useState();
   const [mainImageUrl, setMainImageUrl] = useState("");
   const [panelImageUrl, setPanelImageUrl] = useState("");
   const [mainImage, setMainImage] = useState([]);
-
-  const { getAccessTokenSilently } = useAuth0();
+  const [tagInput, setTagInput] = useState("");
+  const [tags, setTags] = useState({});
 
   useEffect(() => {
     if (activeWorksheet) {
@@ -44,16 +47,17 @@ const NewWorksheet = ({
     formData.append("mainImageUrl", mainImageUrl);
     formData.append("panelImageUrl", panelImageUrl);
     formData.append("mainImage", mainImage[0]);
+    if (selectedFolder) {
+      formData.append("parent", selectedFolder);
+    }
     try {
-      const token = await getAccessTokenSilently();
-      const res = await fetch(url, {
+      const resData = await axios(url, {
         method,
-        body: formData,
+        data: formData,
         headers: {
-          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
       });
-      const resData = await res.json();
       console.log(resData);
       closeModalHandler();
       let message = "New Worksheet Created :)";
@@ -66,6 +70,17 @@ const NewWorksheet = ({
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const addTagHandler = () => {
+    setTags({ ...tags, [tagInput]: "tag" });
+    setTagInput("");
+  };
+
+  const deleteTagHandler = (tagName) => {
+    const updatedTags = { ...tags };
+    delete updatedTags[tagName];
+    setTags(updatedTags);
   };
 
   let mainImageUrlInputIsDisabled = false;
@@ -81,12 +96,12 @@ const NewWorksheet = ({
   }
 
   return (
-    <>
+    <Box className={classes.NewWorksheet}>
       <Box textAlign="center" w="100%">
         {!activeWorksheet ? (
           <Heading
             as="h3"
-            size="lg"
+            size="xl"
             marginBottom="15px"
             className={classes.Title}
           >
@@ -95,7 +110,7 @@ const NewWorksheet = ({
         ) : (
           <Heading
             as="h3"
-            size="lg"
+            size="xl"
             marginBottom="15px"
             className={classes.Title}
           >
@@ -191,11 +206,7 @@ const NewWorksheet = ({
             onChange={(event) => setMainImageUrl(event.target.value)}
           />
         </div>
-        <h4
-          style={{ color: "teal", fontWeight: "bolder", margin: "10px auto" }}
-        >
-          Or
-        </h4>
+        <h4 style={{ fontWeight: "bolder", margin: "10px auto" }}>Or</h4>
         <div className={classes.InputContainer}>
           <Input
             variant="flushed"
@@ -224,6 +235,22 @@ const NewWorksheet = ({
           />
         </div>
       </div>
+      {/* <div className={classes.TagBox}>
+        <Input
+          variant="outline"
+          placeholder="Tag name"
+          value={tagInput}
+          onChange={(e) => setTagInput(e.target.value)}
+        />
+        <Button onClick={addTagHandler}>Add Tag</Button>
+      </div>
+      <div className={classes.TagsBox}>
+        {Object.keys(tags).map((tag) => {
+          return (
+            <Tag key={tag} deleteTagHandler={deleteTagHandler} tag={tag} />
+          );
+        })}
+      </div> */}
       <div className={classes.ButtonBox}>
         <Button
           margin="auto"
@@ -236,14 +263,13 @@ const NewWorksheet = ({
         <Button
           margin="auto"
           variant="outline"
-          variantColor="teal"
           width="150px"
           onClick={editWorksheetHandler}
         >
           {!activeWorksheet ? "Create Worksheet" : "Update Worksheet"}
         </Button>
       </div>
-    </>
+    </Box>
   );
 };
 

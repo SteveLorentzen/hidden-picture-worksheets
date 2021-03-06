@@ -4,9 +4,11 @@ import { Box, Heading, Button, Spinner } from "@chakra-ui/core";
 import classes from "./Assignments.module.css";
 import Modal from "../../components/UI/Modal/Modal";
 import NewAssignment from "../../components/assignments-components/NewAssignment/NewAssignment";
-import { useAuth0 } from "@auth0/auth0-react";
 import Assignment from "../../components/assignments-components/Assignment/Assignment";
 import { timedStatusMessage } from "../../util/timedStatusMessage";
+import axios from "axios";
+import AssignmentReport from "./AssignmentReport/AssignmentReport";
+import { assign } from "lodash";
 
 const Assignments = () => {
   const [assignments, setAssignments] = useState([
@@ -21,8 +23,11 @@ const Assignments = () => {
     // },
   ]);
 
+  const [selectedAssignment, setSelectedAssignment] = React.useState({});
+
   const [modalIsOpen, setModalIsOpen] = useState({
     newAssignment: false,
+    studentReport: false,
   });
 
   const [status, setStatus] = useState({
@@ -31,26 +36,22 @@ const Assignments = () => {
     spinner: false,
   });
 
-  const { getAccessTokenSilently } = useAuth0();
-
   useEffect(() => {
+    let mounted = true;
     const getAssignments = async () => {
       try {
-        const token = await getAccessTokenSilently();
-        const result = await fetch("http://localhost:8080/assignments", {
-          headers: {
-            Authorization: "bearer " + token,
-          },
-        });
-        const resData = await result.json();
-        console.log(resData);
-        setAssignments(resData.assignments);
+        const result = await axios.get("/assignments");
+        console.log(result);
+        if (mounted) {
+          setAssignments(result.data.assignments);
+        }
       } catch (err) {
         console.log(err);
       }
     };
     getAssignments();
-  }, [getAccessTokenSilently]);
+    return () => (mounted = false);
+  }, []);
 
   const openAssignmentHandler = (assignment) => {
     console.log(assignment);
@@ -61,25 +62,18 @@ const Assignments = () => {
     event.stopPropagation();
     console.log("deleting");
     try {
-      const token = await getAccessTokenSilently();
-      const result = await fetch("http://localhost:8080/delete-assignment", {
-        method: "delete",
-        headers: {
-          Authorization: "bearer " + token,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      const result = await axios.delete("/delete-assignment", {
+        data: {
           assignmentId,
-        }),
+        },
       });
-      const resData = await result.json();
-      console.log(resData);
+      console.log(result);
       const updatedAssignments = assignments.filter((assignment) => {
-        return assignment._id !== resData.assignmentId;
+        return assignment._id !== result.data.assignmentId;
       });
       console.log(updatedAssignments);
       setAssignments(updatedAssignments);
-      timedStatusMessage(resData.message, resData.isError, setStatus);
+      timedStatusMessage(result.data.message, result.data.isError, setStatus);
     } catch (err) {
       console.log(err);
       timedStatusMessage(err.message, true, setStatus);
@@ -87,6 +81,7 @@ const Assignments = () => {
   };
 
   const newAssignmentHandler = async (newAssignmentInput) => {
+    console.log(newAssignmentInput);
     setStatus({
       ...status,
       message: "Creating new assignment...",
@@ -94,28 +89,19 @@ const Assignments = () => {
     });
     setModalIsOpen({ ...modalIsOpen, newAssignment: false });
     try {
-      const token = await getAccessTokenSilently();
-      const result = await fetch("http://localhost:8080/create-assignment", {
-        method: "post",
-        headers: {
-          Authorization: "bearer " + token,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          assignmentName: newAssignmentInput.assignmentName,
-          worksheet: newAssignmentInput.worksheet,
-          classroomAssigned: newAssignmentInput.classroomAssigned,
-          dueDate: newAssignmentInput.dueDate,
-        }),
+      const result = await axios.post("/create-assignment", {
+        assignmentName: newAssignmentInput.assignmentName,
+        worksheet: newAssignmentInput.worksheet,
+        classroomAssigned: newAssignmentInput.classroomAssigned,
+        dueDate: newAssignmentInput.dueDate,
       });
-      const resData = await result.json();
-      console.log(resData);
-      if (resData.assignment) {
+      console.log(result);
+      if (result.data.assignment) {
         const updatedAssignments = [...assignments];
-        updatedAssignments.push(resData.assignment);
+        updatedAssignments.push(result.data.assignment);
         setAssignments(updatedAssignments);
       }
-      timedStatusMessage(resData.message, resData.isError, setStatus);
+      timedStatusMessage(result.data.message, result.data.isError, setStatus);
     } catch (err) {
       console.log("anything");
       console.log(err);
@@ -123,20 +109,19 @@ const Assignments = () => {
     }
   };
 
+  const selectAssignmentHandler = (assignment) => {
+    setSelectedAssignment({
+      assignmentName: assignment.assignmentName,
+      scores: assignment.scores,
+    });
+  };
+
   return (
     <>
       <Header />
       <Box className={classes.Assignments}>
         <Heading as="h1">Assignments</Heading>
-        <Button
-          className={classes.AssignmentButton}
-          placeholder="New Assignment"
-          onClick={() =>
-            setModalIsOpen({ ...modalIsOpen, newAssignment: true })
-          }
-        >
-          New Assignment
-        </Button>
+
         <Box className={classes.StatusMessageOuterBox}>
           {status.message !== "" ? (
             <Box className={classes.StatusMessageBox}>
@@ -173,26 +158,99 @@ const Assignments = () => {
           />
         </Modal>
       ) : null}
-      <Box className={classes.AssignmentsBox}>
-        {assignments.map((assignment) => {
-          return (
-            <Assignment
-              key={assignment._id}
-              // question - better to just pass an argument called 'assignment'?
-              assignmentName={assignment.assignmentName}
-              worksheetName={assignment.worksheet.worksheetName}
-              classroomName={assignment.classroomAssigned.name}
-              createdAt={assignment.createdAt}
-              dueDate={assignment.dueDate}
-              openAssignmentHandler={() => openAssignmentHandler(assignment)}
-              scores={assignment.scores}
-              deleteAssignmentHandler={(event) =>
-                deleteAssignmentHandler(event, assignment._id)
-              }
-            />
-          );
-        })}
+      <Box className={classes.CurrentAssignmentsBox}>
+        <Heading as="h2" margin="0 20px 20px 5%" size="lg">
+          Current Assignments:
+        </Heading>
+        <Button
+          className={classes.AssignmentButton}
+          placeholder="New Assignment"
+          onClick={() =>
+            setModalIsOpen({ ...modalIsOpen, newAssignment: true })
+          }
+        >
+          New Assignment
+        </Button>
       </Box>
+
+      <Box className={classes.AssignmentsBox}>
+        {assignments
+          .filter((assignment) => {
+            return new Date(assignment.dueDate) > new Date();
+          })
+          .map((assignment) => {
+            return (
+              <Assignment
+                key={assignment._id}
+                // question - better to just pass an argument called 'assignment'?
+                assignmentName={assignment.assignmentName}
+                id={assignment._id}
+                worksheetName={assignment.worksheet.worksheetName}
+                questionNumber={assignment.worksheet.panelNumber}
+                classroomName={assignment.classroomAssigned.name}
+                createdAt={assignment.createdAt}
+                dueDate={assignment.dueDate}
+                openAssignmentHandler={() => openAssignmentHandler(assignment)}
+                deleteAssignmentHandler={(event) =>
+                  deleteAssignmentHandler(event, assignment._id)
+                }
+                selectAssignmentHandler={() =>
+                  selectAssignmentHandler(assignment)
+                }
+                assignments={assignments}
+                setAssignments={setAssignments}
+              />
+            );
+          })}
+      </Box>
+      <Heading as="h2" margin="20px 5%" size="lg">
+        Past Assignments:
+      </Heading>
+      <Box className={classes.AssignmentsBox}>
+        {assignments
+          .filter((assignment) => {
+            return new Date(assignment.dueDate) < new Date();
+          })
+          .map((assignment) => {
+            return (
+              <Assignment
+                key={assignment._id}
+                // question - better to just pass an argument called 'assignment'?
+                assignmentName={assignment.assignmentName}
+                id={assignment._id}
+                worksheetName={assignment.worksheet.worksheetName}
+                questionNumber={assignment.worksheet.panelNumber}
+                classroomName={assignment.classroomAssigned.name}
+                createdAt={assignment.createdAt}
+                dueDate={assignment.dueDate}
+                openAssignmentHandler={() => openAssignmentHandler(assignment)}
+                deleteAssignmentHandler={(event) =>
+                  deleteAssignmentHandler(event, assignment._id)
+                }
+                selectAssignmentHandler={() =>
+                  selectAssignmentHandler(assignment)
+                }
+                assignments={assignments}
+                setAssignments={setAssignments}
+              />
+            );
+          })}
+      </Box>
+      {selectedAssignment.assignmentName ? (
+        <Modal
+          closeModalHandler={() =>
+            setSelectedAssignment({ assignmentName: "", scores: [] })
+          }
+        >
+          <AssignmentReport
+            scores={selectedAssignment.scores}
+            assignmentName={selectedAssignment.assignmentName}
+            closeModalHandler={() =>
+              setSelectedAssignment({ assignmentName: "", scores: [] })
+            }
+          />
+        </Modal>
+      ) : null}
     </>
   );
 };

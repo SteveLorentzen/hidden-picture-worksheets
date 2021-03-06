@@ -1,0 +1,30 @@
+.Nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.ActiveNavLink {
+  color: white;
+}
+
+.NavLinks {
+  margin: 10px;
+  display: flex;
+}
+
+.NavLink {
+  margin: 10px;
+  list-style: none;
+}
+
+.NavLink:hover {
+  color: white;
+}
+
+.Image {
+  border-radius: 50px;
+  height: 50px;
+  width: 50px;
+  min-width: 50px;
+}

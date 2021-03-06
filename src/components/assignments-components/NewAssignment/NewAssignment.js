@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Box, Input, Heading, Button, Select } from "@chakra-ui/core";
 import classes from "./NewAssignment.module.css";
-import { useAuth0 } from "@auth0/auth0-react";
+import axios from "axios";
+import WorksheetTree from "./WorksheetTree/WorksheetTree";
 
 const NewAssignment = ({ closeModalHandler, newAssignmentHandler }) => {
   const [newAssignmentInput, setNewAssignmentInput] = useState({
@@ -13,29 +14,33 @@ const NewAssignment = ({ closeModalHandler, newAssignmentHandler }) => {
 
   const [worksheets, setWorksheets] = useState([]);
 
+  const [folders, setFolders] = useState([]);
+
   const [classrooms, setClassrooms] = useState([]);
 
-  const { getAccessTokenSilently } = useAuth0();
+  const [selectedWorksheet, setSelectedWorksheet] = React.useState({
+    id: "",
+    worksheetName: "",
+  });
 
   useEffect(() => {
+    let mounted = true;
     const getAssignmentData = async () => {
       try {
-        const token = await getAccessTokenSilently();
-        const result = await fetch("http://localhost:8080/assignment-data", {
-          headers: {
-            Authorization: "bearer " + token,
-          },
-        });
-        const resData = await result.json();
-        console.log(resData);
-        setWorksheets(resData.worksheets);
-        setClassrooms(resData.classrooms);
+        const result = await axios.get("/assignment-data");
+        console.log(result);
+        if (mounted) {
+          setWorksheets(result.data.worksheets);
+          setFolders(result.data.folders);
+          setClassrooms(result.data.classrooms);
+        }
       } catch (err) {
         console.log(err);
       }
     };
     getAssignmentData();
-  }, [getAccessTokenSilently]);
+    return () => (mounted = false);
+  }, []);
 
   const inputHandler = (event) => {
     setNewAssignmentInput({
@@ -59,7 +64,24 @@ const NewAssignment = ({ closeModalHandler, newAssignmentHandler }) => {
           ></Input>
         </Box>
         <Box>
-          <label htmlFor="worksheet">Worksheet</label>
+          <Box className={classes.SelectedWorksheetBox}>
+            <label htmlFor="worksheet">Selected worksheet:</label>
+            <h5 className={classes.SelectedWorksheet}>
+              {selectedWorksheet.worksheetName}
+            </h5>
+          </Box>
+
+          <Box className={classes.WorksheetTreeBox}>
+            <WorksheetTree
+              name="worksheet"
+              folders={folders}
+              worksheets={worksheets}
+              newAssignmentInput={newAssignmentInput}
+              setNewAssignmentInput={setNewAssignmentInput}
+              selectedWorksheet={selectedWorksheet}
+              setSelectedWorksheet={setSelectedWorksheet}
+            />
+            {/* <label htmlFor="worksheet">Worksheet</label>
           <Select
             name="worksheet"
             placeholder="select a worksheet"
@@ -72,7 +94,8 @@ const NewAssignment = ({ closeModalHandler, newAssignmentHandler }) => {
                 </option>
               );
             })}
-          </Select>
+          </Select> */}
+          </Box>
         </Box>
 
         <Box>

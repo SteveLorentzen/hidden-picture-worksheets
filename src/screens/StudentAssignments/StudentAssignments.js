@@ -1,41 +1,42 @@
 import React, { useState, useEffect } from "react";
 import classes from "./StudentAssignments.module.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import StudentHeader from "../../components/common-components/StudentHeader/StudentHeader";
-import { useAuth0 } from "@auth0/auth0-react";
 import AssignedWorksheet from "../../components/student-assignments-components/AssignedWorksheet/AssignedWorksheet";
-import { Spinner, Box, Heading } from "@chakra-ui/core";
+import { Spinner, Box, Heading, Button } from "@chakra-ui/core";
+import axios from "axios";
+import Modal from "../../components/UI/Modal/Modal";
 
 const StudentAssignments = () => {
   const [scores, setScores] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const { getAccessTokenSilently } = useAuth0();
+  const [thisWorksheetIsLate, setThisWorksheetIsLate] = useState(false);
+
+  const history = useHistory();
 
   useEffect(() => {
     setIsLoading(true);
     const getAssignedWorksheets = async () => {
       try {
-        const token = await getAccessTokenSilently();
-        const result = await fetch(
-          "http://localhost:8080/assigned-worksheets",
-          {
-            headers: {
-              Authorization: "bearer " + token,
-            },
-          }
-        );
-        const resData = await result.json();
-        console.log(resData);
-        setScores(resData.scores);
+        const result = await axios.get("/assigned-worksheets");
+        console.log(result);
+        setScores(result.data.scores);
         setIsLoading(false);
       } catch (err) {
         console.log(err);
       }
     };
     getAssignedWorksheets();
-  }, [getAccessTokenSilently]);
+  }, []);
+
+  const openWorksheetHandler = (id, dueDate) => {
+    if (new Date(dueDate) < new Date()) {
+      return setThisWorksheetIsLate(true);
+    }
+    history.push("/student-worksheet/" + id);
+  };
 
   return (
     <>
@@ -54,25 +55,41 @@ const StudentAssignments = () => {
           <Spinner size="lg" />
         </Box>
       ) : (
-        <Box display="flex" flexWrap="wrap" justifyContent="space-between">
-          {scores.map((score) => {
-            return (
-              <Link
-                key={score.assignment._id}
-                to={"/student-worksheet/" + score.assignment._id}
-                className={classes.Link}
-              >
+        <Box className={classes.AssignmentBox}>
+          {scores
+            .filter((score) => {
+              console.log(score.assignment.dueDate, new Date(Date.now()));
+              return new Date(score.assignment.dueDate) > new Date(Date.now());
+            })
+            .map((score) => {
+              return (
                 <AssignedWorksheet
                   worksheetName={score.assignment.worksheet.worksheetName}
                   dueDate={score.assignment.dueDate}
                   panelNumber={score.assignment.worksheet.panelNumber}
                   questionAnswers={score.questionAnswers}
+                  openWorksheetHandler={() =>
+                    openWorksheetHandler(
+                      score.assignment._id,
+                      score.assignment.dueDate
+                    )
+                  }
                 />
-              </Link>
-            );
-          })}
+              );
+            })}
         </Box>
       )}
+      {thisWorksheetIsLate ? (
+        <Modal
+          size="small"
+          closeModalHandler={() => setThisWorksheetIsLate(false)}
+        >
+          <Heading as="h2">
+            Sorry, this worksheet is no longer available.
+          </Heading>
+          <Button onClick={() => setThisWorksheetIsLate(false)}>Close</Button>
+        </Modal>
+      ) : null}
     </>
   );
 };

@@ -209,7 +209,7 @@ const QuestionWizard = ({
 
   return (
     <>
-      <Heading as="h1" size="lg" marginBottom="20px" className={classes.Title}>
+      <Heading as="h1" size="xl" marginBottom="20px" className={classes.Title}>
         Question Wizard
       </Heading>
       <hr style={{ marginBottom: "15px" }} />

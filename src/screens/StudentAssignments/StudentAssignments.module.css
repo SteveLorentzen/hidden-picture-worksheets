@@ -19,3 +19,9 @@
   display: flex;
   justify-content: center;
 }
+
+.AssignmentBox {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}

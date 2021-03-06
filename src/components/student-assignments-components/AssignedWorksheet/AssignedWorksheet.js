@@ -39,11 +39,12 @@ const AssignedWorksheet = ({
   return (
     <>
       <Box
-        className={
-          isCompleted
-            ? [classes.AssignedWorksheet, classes.Completed].join(" ")
-            : classes.AssignedWorksheet
-        }
+        // className={
+        //   isCompleted
+        //     ? [classes.AssignedWorksheet, classes.Completed].join(" ")
+        //     : classes.AssignedWorksheet
+        // }
+        className={classes.AssignedWorksheet}
         onClick={openWorksheetHandler}
       >
         <Box display="flex" alignItems="center">
@@ -56,7 +57,7 @@ const AssignedWorksheet = ({
               <IconContext.Provider
                 value={{
                   size: "2em",
-                  color: "green",
+                  color: "tomato",
                   className: `${classes.Icons}`,
                 }}
               >

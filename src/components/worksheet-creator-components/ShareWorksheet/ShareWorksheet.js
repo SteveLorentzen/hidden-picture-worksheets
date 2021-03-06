@@ -1,32 +1,20 @@
 import React, { useState } from "react";
 import { Heading, Box, Input, Button } from "@chakra-ui/core";
 import classes from "./ShareWorksheet.module.css";
-import { useAuth0 } from "@auth0/auth0-react";
+import axios from "axios";
 
 const ShareWorksheet = ({ worksheetId, worksheetName, closeModalHandler }) => {
   const [email, setEmail] = useState("");
 
-  const { getAccessTokenSilently } = useAuth0();
-
   const shareWorksheetHandler = async () => {
     try {
-      const token = await getAccessTokenSilently();
-      const result = await fetch(
-        "http://localhost:8080/send-shared-worksheet",
-        {
-          method: "post",
-          headers: {
-            Authorization: "bearer " + token,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            worksheetId: worksheetId,
-          }),
-        }
-      );
-      const resData = await result.json();
-      console.log(resData);
+      const result = await axios.post("/send-shared-worksheet", {
+        data: {
+          email,
+          worksheetId: worksheetId,
+        },
+      });
+      console.log(result);
     } catch (err) {
       console.log(err);
     }
@@ -35,17 +23,11 @@ const ShareWorksheet = ({ worksheetId, worksheetName, closeModalHandler }) => {
 
   return (
     <Box className={classes.Share}>
-      <Box
-        marginBottom="20px"
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        textAlign="center"
-      >
+      <Box className={classes.TitleBox}>
         <Heading as="h1" size="xl" className={classes.Title}>
           Share Worksheet
         </Heading>
-        <p>(With another teacher)</p>
+        <hr style={{ marginBottom: "15px" }} />
       </Box>
 
       <Heading as="h2" size="lg" className={classes.WorksheetName}>
@@ -68,7 +50,6 @@ const ShareWorksheet = ({ worksheetId, worksheetName, closeModalHandler }) => {
         <Button
           margin="auto"
           variant="outline"
-          variantColor="teal"
           width="175px"
           onClick={shareWorksheetHandler}
         >

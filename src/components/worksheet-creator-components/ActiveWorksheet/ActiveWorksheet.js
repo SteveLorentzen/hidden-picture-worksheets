@@ -9,6 +9,7 @@ const ActiveWorksheet = ({
   showPanels,
   mainImageUrl,
   panelImageUrl,
+  worksheetName,
 }) => {
   return (
     <div className={classes.WorksheetContainer}>
@@ -33,7 +34,6 @@ const ActiveWorksheet = ({
       <div
         style={{
           backgroundImage: `url('${mainImageUrl}')`,
-          backgroundSize: "cover",
         }}
         className={classes.PictureContainer}
       >

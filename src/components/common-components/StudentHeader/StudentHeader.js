@@ -28,12 +28,12 @@ const StudentHeader = ({ isHeaderForStudentWorksheet }) => {
               alignItems: "center",
             }}
           >
-            {isHeaderForStudentWorksheet ? (
+            {/* {isHeaderForStudentWorksheet ? (
               <Button variant="outline" display="flex">
                 <IoIosArrowBack />
                 <NavLink to="/">Back to Assignments</NavLink>
               </Button>
-            ) : null}
+            ) : null} */}
             <div>
               <Link to="/">
                 <Heading as="h2" size="md" color="white">
@@ -44,22 +44,35 @@ const StudentHeader = ({ isHeaderForStudentWorksheet }) => {
           </div>
 
           <div
-            style={{
-              width: "30%",
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "center",
-            }}
+            className={classes.Nav}
+            style={
+              isHeaderForStudentWorksheet
+                ? { justifyContent: "space-between" }
+                : {}
+            }
           >
             {isAuthenticated ? (
-              <Menu>
-                <MenuButton>
-                  <Image src={user.picture} className={classes.Image} />
-                </MenuButton>
-                <MenuList>
-                  <MenuItem onClick={logout}>Logout</MenuItem>
-                </MenuList>
-              </Menu>
+              <>
+                {isHeaderForStudentWorksheet ? (
+                  <NavLink
+                    className={classes.Back}
+                    exact
+                    to="/"
+                    activeClassName={classes.ActiveNavLink}
+                  >
+                    <IoIosArrowBack />
+                    Back To Assignments
+                  </NavLink>
+                ) : null}
+                <Menu>
+                  <MenuButton>
+                    <Image src={user.picture} className={classes.Image} />
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem onClick={logout}>Logout</MenuItem>
+                  </MenuList>
+                </Menu>
+              </>
             ) : (
               <Login />
             )}

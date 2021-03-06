@@ -3,6 +3,7 @@ import classes from "./JoinClassroom.module.css";
 import { useAuth0 } from "@auth0/auth0-react";
 import Header from "../../components/common-components/Header/Header";
 import { Button, Input, Box } from "@chakra-ui/core";
+import axios from "axios";
 
 const JoinClassroom = () => {
   const [classroomCode, setClassroomCode] = useState("");
@@ -11,16 +12,13 @@ const JoinClassroom = () => {
 
   const checkClassroomCode = async (code) => {
     try {
-      const result = await fetch(
-        "http://localhost:8080/auth/check-classroom-code/" + code
-      );
-      const resData = await result.json();
-      console.log(resData);
-      if (resData.codeIsValid) {
+      const result = await axios.get("/auth/check-classroom-code/" + code);
+      console.log(result);
+      if (result.data.codeIsValid) {
         localStorage.setItem("classroomCode", classroomCode);
         return classroomCode;
       } else {
-        console.log(resData);
+        console.log(result);
         return null;
       }
     } catch (err) {

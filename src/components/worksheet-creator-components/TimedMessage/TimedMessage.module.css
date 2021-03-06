@@ -1,0 +1,18 @@
+.TimedMessageBox {
+  text-align: center;
+}
+
+.TimedMessage {
+  width: 400px;
+  margin: auto;
+  text-align: center;
+  font-weight: bold;
+}
+
+.TimedMessage {
+  width: 400px;
+  margin: auto;
+  text-align: center;
+  font-weight: bold;
+  color: red;
+}

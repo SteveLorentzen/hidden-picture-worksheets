@@ -1,3 +1,13 @@
+.Student {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin: 5px auto;
+  width: 70%;
+}
+
 .MoreButton {
   margin: 0 10px;
 }

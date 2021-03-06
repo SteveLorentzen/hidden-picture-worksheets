@@ -8,14 +8,7 @@ import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/core";
 const Student = ({ name, email, profilePicture, removeHandler }) => {
   return (
     <>
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        border="1px solid black"
-        borderRadius="5px"
-        margin="5px auto"
-      >
+      <Box className={classes.Student}>
         <div>
           <Image h="50px" src={profilePicture} />
         </div>

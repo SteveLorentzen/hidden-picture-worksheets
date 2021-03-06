@@ -1,10 +1,9 @@
 .Title {
-  color: teal;
   margin: 20px auto -10px auto;
 }
 
-.Teal {
-  color: teal;
+.Bold {
+  /* color: teal; */
   font-weight: bold;
 }
 

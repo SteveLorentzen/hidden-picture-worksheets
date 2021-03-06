@@ -6,6 +6,7 @@ const StudentQuestionAnswer = ({
   questionAnswerKey,
   questionAnswer,
   changeAnswerHandler,
+  isDisabled,
 }) => {
   let isInvalid =
     questionAnswer.answerWasAttempted &&
@@ -24,6 +25,7 @@ const StudentQuestionAnswer = ({
           type="text"
           value={questionAnswer.answer}
           onChange={(event) => changeAnswerHandler(event, questionAnswerKey)}
+          isDisabled={isDisabled}
         />
       </Box>
       <hr />

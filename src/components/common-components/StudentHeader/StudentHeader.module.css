@@ -2,6 +2,25 @@
   text-align: center;
 }
 
+.Nav {
+  width: 20%;
+  min-width: 220px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.Back {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.Back:hover {
+  color: white;
+}
+
 .DrawerHeader {
   display: flex;
   flex-direction: column;
@@ -57,7 +76,7 @@
   color: white;
 }
 
-.Active:hover {
+.ActiveNavLink:hover {
   background-color: rgb(255, 214, 34);
 }
 

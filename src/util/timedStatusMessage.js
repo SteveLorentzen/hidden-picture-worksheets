@@ -7,6 +7,6 @@ export const timedStatusMessage = (message, isError, setStatusCallback) => {
   } else {
     setTimeout(() => {
       setStatusCallback({ message: "", isError: false, spinner: false });
-    }, 1500);
+    }, 2000);
   }
 };
