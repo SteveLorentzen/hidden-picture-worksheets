@@ -1,7 +1,7 @@
 import React from "react";
-import { Heading } from "@chakra-ui/core";
-import { Link } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
+import {Heading} from "@chakra-ui/core";
+import {Link} from "react-router-dom";
+import {useAuth0} from "@auth0/auth0-react";
 import classes from "./Header.module.css";
 import CustomDrawer from "../../UI/Drawer/Drawer";
 import FileTree from "./FileTree/FileTree";
@@ -30,11 +30,11 @@ const Header = ({
 
   const [drawerIsOpen, setDrawerIsOpen] = React.useState(false);
 
-  const { isAuthenticated } = useAuth0();
+  const {isAuthenticated} = useAuth0();
 
   const openNewWorksheetModalHandler = () => {
     setDrawerIsOpen(false);
-    setModalIsOpen({ ...modalIsOpen, newWorksheet: true });
+    setModalIsOpen({...modalIsOpen, newWorksheet: true});
   };
 
   const openActiveWorksheetHandler = (id) => {
@@ -71,7 +71,7 @@ const Header = ({
             </>
           ) : null}
           <Link to="/">
-            <Heading as="h2" size="md" color="white">
+            <Heading as="h2" size="md" color="white" marginLeft="1rem">
               HiddenPictureWorksheets.com
             </Heading>
           </Link>
@@ -85,12 +85,12 @@ const Header = ({
       {modalIsOpen.newWorksheet ? (
         <Modal
           closeModalHandler={() =>
-            setModalIsOpen({ ...modalIsOpen, newWorksheet: false })
+            setModalIsOpen({...modalIsOpen, newWorksheet: false})
           }
         >
           <NewWorksheet
             closeModalHandler={() =>
-              setModalIsOpen({ ...modalIsOpen, newWorksheet: false })
+              setModalIsOpen({...modalIsOpen, newWorksheet: false})
             }
             setTimedMessage={setTimedMessage}
             selectedFolderId={selectedFolder.id}

@@ -1,20 +1,21 @@
 .NewClassroomBox {
   text-align: center;
-  padding: 20px;
+  padding: 3rem;
   display: flex;
   justify-content: center;
 }
 
 .ClassroomsBox {
   display: flex;
-  justify-content: flex-start;
+  height: 11rem;
+  width: 100vw;
+  max-width: 100vw;
+  margin: 0 auto;
   align-items: center;
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 0 25px;
   border: 1px solid black;
   background-color: tomato;
-  height: 125px;
 }
 
 .SpinnerBox {

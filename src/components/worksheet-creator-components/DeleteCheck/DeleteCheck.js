@@ -1,6 +1,6 @@
 import classes from "./DeleteCheck.module.css";
 import React from "react";
-import { Button, Box, Heading } from "@chakra-ui/core";
+import {Button, Box, Heading} from "@chakra-ui/core";
 import ButtonCustom from "../../UI/ButtonCustom/ButtonCustom";
 import axios from "axios";
 
@@ -11,10 +11,10 @@ const DeleteCheck = ({
   setActiveWorksheet,
 }) => {
   const deleteWorksheetHandler = async (worksheetId) => {
-    setTimedMessage({ message: "deleting", showing: true });
+    setTimedMessage({message: "deleting", showing: true});
     try {
       console.log(worksheetId);
-      const result = await axios.delete("/worksheet/" + worksheetId);
+      const result = await axios.delete("/delete-worksheet/" + worksheetId);
       console.log(result);
       closeModalHandler();
 
@@ -25,21 +25,18 @@ const DeleteCheck = ({
           err: true,
         });
         setTimeout(
-          () => setTimedMessage({ message: "", showing: false, err: false }),
+          () => setTimedMessage({message: "", showing: false, err: false}),
           10000
         );
       } else {
-        setTimedMessage({ message: result.data.message, showing: true });
-        setTimeout(
-          () => setTimedMessage({ message: "", showing: false }),
-          1500
-        );
+        setTimedMessage({message: result.data.message, showing: true});
+        setTimeout(() => setTimedMessage({message: "", showing: false}), 1500);
         setActiveWorksheet(null);
       }
     } catch (err) {
       console.log(err);
-      setTimedMessage({ message: "Failed to Delete :(", showing: true });
-      setTimeout(() => setTimedMessage({ message: "", showing: false }), 7500);
+      setTimedMessage({message: "Failed to Delete :(", showing: true});
+      setTimeout(() => setTimedMessage({message: "", showing: false}), 7500);
     }
   };
 

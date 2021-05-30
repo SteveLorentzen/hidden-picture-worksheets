@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import classes from "./Assignment.module.css";
 import axios from "axios";
-import { Box, Heading, Button, Input } from "@chakra-ui/core";
-import { format } from "date-fns";
-import { AiFillEdit } from "react-icons/ai";
-import { IconContext } from "react-icons/";
+import {Box, Heading, Button, Input} from "@chakra-ui/core";
+import {format} from "date-fns";
+import {AiFillEdit} from "react-icons/ai";
+import {IconContext} from "react-icons/";
 import Path from "../../common-components/Header/FileTree/Path/Path";
 
 const Assignment = ({
@@ -49,7 +49,7 @@ const Assignment = ({
       });
       const updatedAssignments = assignments.map((assignment) => {
         if (assignment._id === id) {
-          return { ...assignment, assignmentName: result.data.assignmentName };
+          return {...assignment, assignmentName: result.data.assignmentName};
         } else return assignment;
       });
       console.log(updatedAssignments);
@@ -97,7 +97,7 @@ const Assignment = ({
                 {assignmentName}
               </Heading>
             )}
-            <IconContext.Provider value={{ size: "1.5rem" }}>
+            <IconContext.Provider value={{size: "1.5rem"}}>
               <AiFillEdit
                 className={classes.EditIcon}
                 onClick={(event) => editingHandler(event)}

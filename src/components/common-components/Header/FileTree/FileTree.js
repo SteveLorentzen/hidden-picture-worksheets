@@ -1,14 +1,14 @@
 import * as React from "react";
 import classes from "./FileTree.module.css";
-import { Box, Spinner, Heading, Input } from "@chakra-ui/core";
+import {Box, Spinner, Heading, Input} from "@chakra-ui/core";
 import Worksheet from "./Worksheet/Worksheet";
 import Folder from "./Folder/Folder";
 import Path from "./Path/Path";
 import axios from "axios";
 import CreateNewWorksheet from "./CreateNewWorksheet/CreateNewWorksheet";
 import CreateNewFolder from "./CreateNewFolder/CreateNewFolder";
-import { IoIosCloseCircle, IoIosTrash } from "react-icons/io";
-import { IconContext } from "react-icons";
+import {IoIosCloseCircle, IoIosTrash} from "react-icons/io";
+import {IconContext} from "react-icons";
 
 const FileTree = ({
   openNewWorksheetModalHandler,
@@ -24,9 +24,8 @@ const FileTree = ({
   // folders,
   // setFolders,
 }) => {
-  const [worksheetMenuIsLoading, setWorksheetMenuIsLoading] = React.useState(
-    false
-  );
+  const [worksheetMenuIsLoading, setWorksheetMenuIsLoading] =
+    React.useState(false);
 
   const [folders, setFolders] = React.useState([]);
 
@@ -67,7 +66,7 @@ const FileTree = ({
   const deleteHandler = async () => {
     console.log(moved, selectedFolder);
     if (moved.id === selectedFolder.id) {
-      setSelectedFolder({ path: [], id: "" });
+      setSelectedFolder({path: [], id: ""});
     }
     // if (!selectedFolder) {
     //   console.log("no selected folder");
@@ -91,7 +90,7 @@ const FileTree = ({
       if (result.data.folders) {
         setFolders(result.data.folders);
         if (result.data.deletedFolders.includes(selectedFolder.id)) {
-          setSelectedFolder({ path: [], id: "" });
+          setSelectedFolder({path: [], id: ""});
         }
       }
 
@@ -207,7 +206,7 @@ const FileTree = ({
     <Box className={classes.FileTree}>
       <Box className={classes.MenuHeader}>
         <IconContext.Provider
-          value={{ size: "1.5em", className: `${classes.Icons}` }}
+          value={{size: "1.5em", className: `${classes.Icons}`}}
         >
           <IoIosCloseCircle
             className={classes.CloseButton}
@@ -238,10 +237,11 @@ const FileTree = ({
         placeholder="Search"
         value={searchInput}
         onChange={(event) => searchHandler(event)}
+        margin="1.5rem 0"
       />
       <Box
         className={classes.WorksheetNameBox}
-        onClick={() => setSelectedFolder({ path: [], id: "" })}
+        onClick={() => setSelectedFolder({path: [], id: ""})}
         onDragOver={(event) => allowDropHandler(event)}
         onDrop={acceptMoved}
       >
@@ -324,7 +324,7 @@ const FileTree = ({
           onDragLeave={leaveHandler}
         >
           <IconContext.Provider
-            value={{ size: "3em", className: `${classes.Icons}` }}
+            value={{size: "3em", className: `${classes.Icons}`}}
           >
             <IoIosTrash className={classes.TrashCan} />
           </IconContext.Provider>
