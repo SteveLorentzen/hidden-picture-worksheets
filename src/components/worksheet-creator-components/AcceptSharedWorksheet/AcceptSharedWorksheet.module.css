@@ -1,0 +1,17 @@
+.AcceptWorksheet {
+  height: 100%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.Message {
+  font-size: 1.3rem;
+  font-weight: bolder;
+}
+
+.Button {
+  width: 25%;
+}

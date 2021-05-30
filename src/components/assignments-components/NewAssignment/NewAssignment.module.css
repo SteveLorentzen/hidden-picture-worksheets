@@ -1,0 +1,37 @@
+.NewAssignment {
+  display: flex;
+  height: 600px;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.SelectedWorksheetBox {
+  display: flex;
+  align-items: center;
+}
+
+.SelectedWorksheet {
+  margin-left: 10px;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.WorksheetTreeBox {
+  border: 1px solid black;
+  min-height: 150px;
+  max-height: 150px;
+  overflow: auto;
+}
+
+.ButtonBox {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.AssignButton {
+}
+
+.CancelButton {
+  margin: 0 15px;
+}

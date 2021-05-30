@@ -1,0 +1,37 @@
+.NewWorksheetDetailsBox {
+  border: 1px solid black;
+  padding: 15px;
+  width: 300px;
+  margin: auto;
+}
+
+.InputContainer {
+  display: flex;
+  align-items: center;
+}
+
+.Label {
+  width: 50%;
+}
+
+.MainImageContainer {
+  margin: 10px 0;
+  border: 1px solid rgb(168, 168, 168);
+  padding: 10px;
+}
+
+.Input {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.ButtonBox {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ArrowUp {
+  align-self: flex-end;
+}

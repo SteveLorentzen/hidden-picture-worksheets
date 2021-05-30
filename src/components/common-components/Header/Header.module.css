@@ -1,0 +1,52 @@
+.Header {
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 10px;
+  width: 100%;
+  background-color: tomato;
+}
+
+.DrawerHeader {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.MenuBox {
+  display: flex;
+  min-width: 350px;
+  width: 350px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.NewWorksheetIcon {
+  margin: 7px;
+}
+
+.IconDescription {
+  padding: 3px 5px;
+  border: 2px solid black;
+  position: fixed;
+  background-color: rgb(228, 253, 253);
+  z-index: 500;
+  top: 65px;
+}
+
+.NewFolder {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.NewFolderButton {
+  width: 45%;
+}
+
+.NewFolderInput {
+  width: 10%;
+}

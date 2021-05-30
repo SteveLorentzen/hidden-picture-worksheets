@@ -1,0 +1,31 @@
+.AssignmentReport {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 100%;
+  min-height: 200px;
+  text-align: center;
+}
+
+.AssignmentName {
+}
+
+.StudentProgressBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border: 1px solid black;
+  height: 60%;
+  width: 80%;
+  border-radius: 3px;
+  overflow: auto;
+}
+
+.Report {
+  margin: 10px 0 5px 20px;
+}
+
+.DoneButton {
+}

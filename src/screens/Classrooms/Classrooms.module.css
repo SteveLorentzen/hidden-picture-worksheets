@@ -1,0 +1,44 @@
+.NewClassroomBox {
+  text-align: center;
+  padding: 3rem;
+  display: flex;
+  justify-content: center;
+}
+
+.ClassroomsBox {
+  display: flex;
+  height: 11rem;
+  width: 100vw;
+  max-width: 100vw;
+  margin: 0 auto;
+  align-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border: 1px solid black;
+  background-color: tomato;
+}
+
+.SpinnerBox {
+  text-align: center;
+  padding: 10px;
+  height: 25px;
+}
+
+.CodeBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.Code {
+  font-size: 4rem;
+  font-weight: bolder;
+}
+
+.Prompt {
+  text-align: center;
+}
+
+.PromptBox {
+}

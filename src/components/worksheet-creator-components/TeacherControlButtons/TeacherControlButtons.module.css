@@ -1,0 +1,136 @@
+.ButtonBox {
+  margin: auto;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.TeacherControls {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 1000px;
+}
+
+.Icons {
+  margin: 0 15px 8px 15px;
+  border: 1px solid black;
+  min-width: 50px;
+  padding: 6px;
+  border-radius: 8px;
+  background-color: rgb(241, 244, 250);
+  color: black;
+}
+
+.Icons:hover {
+  cursor: pointer;
+  background-color: rgb(224, 233, 252);
+}
+
+.QuestionAnswerIcons {
+  display: flex;
+  justify-content: flex-start;
+  width: 40%;
+}
+
+.NewWorksheetIcon {
+  display: flex;
+  justify-content: center;
+  width: 20%;
+}
+
+.EditDeleteWorksheetIcons {
+  display: flex;
+  justify-content: flex-end;
+  width: 40%;
+}
+
+.Active {
+  background-color: rgb(133, 210, 255);
+  transform: scale(1.1);
+  transition: ease;
+}
+
+.Description {
+  position: fixed;
+  top: 185px;
+  z-index: 500;
+  background-color: tomato;
+  border: 1px solid black;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-weight: bold;
+  color: white;
+}
+
+@media (max-width: 1000px) {
+  .TeacherControls {
+    width: 800px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin: auto;
+  }
+
+  .Icons {
+    margin: 15px 15px;
+    border: 1px solid black;
+    padding: 8px;
+    border-radius: 8px;
+  }
+
+  .QuestionAnswerIcons {
+    display: flex;
+    justify-content: flex-start;
+    width: 40%;
+  }
+
+  .NewWorksheetIcon {
+    display: flex;
+    justify-content: center;
+    width: 20%;
+  }
+
+  .EditDeleteWorksheetIcons {
+    display: flex;
+    justify-content: flex-end;
+    width: 40%;
+  }
+}
+
+@media (max-width: 800px) {
+  .TeacherControls {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin: auto;
+  }
+
+  .Icons {
+    margin: 5px 5px;
+    border: 1px solid black;
+    padding: 8px;
+    border-radius: 8px;
+  }
+
+  .QuestionAnswerIcons {
+    display: flex;
+    justify-content: space-evenly;
+    width: 52%;
+  }
+
+  .NewWorksheetIcon {
+    display: flex;
+    justify-content: space-evenly;
+    width: 16%;
+  }
+
+  .EditDeleteWorksheetIcons {
+    display: flex;
+    justify-content: space-evenly;
+    width: 34%;
+  }
+  .TeacherControls {
+    width: 400px;
+  }
+}

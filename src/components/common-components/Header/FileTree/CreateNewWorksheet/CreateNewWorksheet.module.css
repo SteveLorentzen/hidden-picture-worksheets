@@ -1,0 +1,25 @@
+.NewWorksheet {
+  display: flex;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  padding: 5px;
+  background-color: rgb(255, 222, 217);
+  width: 100%;
+}
+
+.NewWorksheet:hover {
+  cursor: pointer;
+  background-color: rgb(252, 197, 189);
+}
+
+.Active {
+  background-color: tomato;
+}
+
+.Active:hover {
+  background-color: tomato;
+}
+
+.NewWorksheetIcon {
+  margin-right: 5px;
+}

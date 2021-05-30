@@ -1,0 +1,30 @@
+.Share {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 20px;
+}
+
+.TitleBox {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  width: 90%;
+}
+
+.Title {
+  width: 100%;
+}
+
+.WorksheetName {
+  margin-bottom: 30px;
+}
+
+.ButtonBox {
+  margin: 30px 0;
+  display: flex;
+  justify-content: center;
+}

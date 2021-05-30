@@ -1,0 +1,23 @@
+.MenuButton {
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.MenuButton:hover {
+  cursor: pointer;
+  background-color: rgb(235, 90, 65);
+}
+
+.Icon:hover {
+  cursor: pointer;
+  background-color: rgb(252, 129, 107);
+}
+
+.Icon {
+  margin: 0 10px;
+  border-radius: 10px;
+  background-color: rgb(252, 151, 133);
+  transform: scale(1);
+  transition: ease;
+  transition-duration: 0.3s;
+}

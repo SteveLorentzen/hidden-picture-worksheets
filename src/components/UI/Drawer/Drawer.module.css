@@ -1,15 +1,17 @@
 .Drawer {
-  height: 100%;
-  width: 275px;
+  height: 100vh;
+  max-height: 100vh;
+  min-width: 300px;
   position: fixed;
   left: 0;
   top: 0;
   z-index: 500;
-  transform: translateX(-275px);
+  transform: translateX(-3000px);
   transition: ease-in-out;
-  transition-duration: 0.2s;
+  transition-duration: 1s;
   background-color: white;
   border: 2px solid black;
+  overflow-y: auto;
 }
 
 .DrawerOpen {

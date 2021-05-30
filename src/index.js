@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
@@ -6,6 +6,10 @@ import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from "react-router-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { ThemeProvider, CSSReset } from "@chakra-ui/core";
+// import axios from "axios";
+// import { AuthContext } from "./App";
+
+// const { userId, token } = React.useContext(AuthContext);
 
 ReactDOM.render(
   <React.StrictMode>

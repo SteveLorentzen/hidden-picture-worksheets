@@ -1,0 +1,48 @@
+.Assignments {
+  text-align: center;
+  padding: 15px;
+}
+
+.CurrentAssignmentsBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.AssignmentButton {
+  margin: 10px 5% 10px 0;
+  align-self: flex-start;
+}
+
+.AssignmentsBox {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  text-align: center;
+}
+
+.StatusMessageOuterBox {
+  height: 15px;
+  min-height: 15px;
+  margin-bottom: 4px;
+}
+
+.StatusMessageBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.StatusMessage {
+  font-weight: bolder;
+}
+
+.Error {
+  color: red;
+}
+
+.Spinner {
+  margin: 0 10px;
+}

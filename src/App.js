@@ -1,20 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createContext } from "react";
 import "./App.css";
 import { Route, Switch } from "react-router-dom";
-import Welcome from "./components/Welcome/Welcome";
-import WorksheetCreator from "./components/WorksheetCreator/WorksheetCreator";
-import Classroom from "./components/Classroom/Classroom";
-import JoinClassroom from "./components/JoinClassroom/JoinClassroom";
+import Welcome from "./screens/Welcome/Welcome";
+import WorksheetCreator from "./screens/WorksheetCreator/WorksheetCreator";
+// import Classroom from "./components/classrooms-components/Classroom/Classroom";
+import JoinClassroom from "./screens/JoinClassroom/JoinClassroom";
 import { useAuth0 } from "@auth0/auth0-react";
-import Classrooms from "./components/Classrooms/Classrooms";
+import Classrooms from "./screens/Classrooms/Classrooms";
 import AcceptWorksheet from "./components/AcceptWorksheet/AcceptWorksheet";
-import Assignments from "./components/Assignments/Assignments";
-import StudentView from "./components/StudentView/StudentView";
+import Assignments from "./screens/Assignments/Assignments";
+import StudentAssignments from "./screens/StudentAssignments/StudentAssignments";
+import StudentWorksheet from "./screens/StudentWorksheet/StudentWorksheet";
+import axios from "axios";
+
+export const AuthContext = createContext();
 
 function App() {
-  const [classroomCode, setClassroomCode] = useState("");
+  // const [classroomCode, setClassroomCode] = useState("");
+
+  const [token, setToken] = useState("");
+
+  const [userId, setUserId] = useState("");
 
   const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();
+
+  axios.defaults.baseURL = "http://localhost:8080";
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  axios.defaults.headers.common["userId"] = userId;
 
   let isTeacher = false;
 
@@ -31,6 +43,7 @@ function App() {
       }
       try {
         const token = await getAccessTokenSilently();
+        setToken(token);
 
         const result = await fetch("http://localhost:8080/auth/create-user", {
           method: "post",
@@ -44,7 +57,8 @@ function App() {
         });
         const resData = await result.json();
         console.log(resData);
-        setClassroomCode(resData.classroomCode);
+        // setClassroomCode(resData.classroomCode);
+        setUserId(resData.userId);
       } catch (err) {
         console.log(err);
       }
@@ -54,46 +68,42 @@ function App() {
 
   return (
     <>
-      <Switch>
-        {isAuthenticated &&
-        user["https://hiddenpicturetest.com/roles"].includes("teacher") ? (
-          <Route path="/" exact component={WorksheetCreator} />
-        ) : isAuthenticated &&
-          !user["https://hiddenpicturetest.com/roles"].includes("teacher") ? (
-          <Route path="/" exact component={StudentView} />
-        ) : (
-          <Route path="/" exact render={(props) => <Welcome />} />
-        )}
-        <Route
-          path="/classroom"
-          exact
-          render={(props) => <Classroom classroomCode={classroomCode} />}
-        />
-
-        <Route path="/join" exact component={JoinClassroom} />
-        <Route
-          path="/accept-worksheet/:worksheetId"
-          exact
-          component={AcceptWorksheet}
-        />
-
-        {isAuthenticated && isTeacher ? (
-          <>
-            <Route path="/classrooms" exact component={Classrooms} />
-            <Route path="/assignments" exact component={Assignments} />
+      <AuthContext.Provider value={{ token, userId }}>
+        {isAuthenticated && isTeacher && token && userId ? (
+          <Switch>
+            <Route path="/" exact component={WorksheetCreator} />
+            <Route path="/classrooms" component={Classrooms} />
+            <Route path="/assignments" component={Assignments} />
             <Route
               path="/worksheets"
               exact
               render={(props) => <WorksheetCreator />}
             />
-          </>
-        ) : null}
-        {isAuthenticated && !isTeacher ? (
-          <Route path="/worksheets" exact render={(props) => <StudentView />} />
-        ) : null}
-
-        <Route path="/:anything" component={Welcome} />
-      </Switch>
+          </Switch>
+        ) : isAuthenticated && !isTeacher && token && userId ? (
+          <Switch>
+            <Route path="/" exact component={StudentAssignments} />
+            <Route
+              path="/student-worksheet/:assignmentId"
+              component={StudentWorksheet}
+            />
+          </Switch>
+        ) : (
+          <Switch>
+            {/* <Route
+              path="/classroom"
+              render={(props) => <Classroom classroomCode={classroomCode} />}
+            /> */}
+            <Route path="/join" component={JoinClassroom} />
+            <Route
+              path="/accept-worksheet/:worksheetId"
+              component={AcceptWorksheet}
+            />
+            <Route path="/:anything" component={Welcome} />
+            <Route path="/" render={(props) => <Welcome />} />
+          </Switch>
+        )}
+      </AuthContext.Provider>
     </>
   );
 }

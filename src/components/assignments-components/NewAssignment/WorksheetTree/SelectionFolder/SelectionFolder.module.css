@@ -1,0 +1,41 @@
+.Folder {
+  border-left: 1px dotted black;
+}
+
+.FolderName {
+  /* border: 1px solid black; */
+  width: 100%;
+  font-weight: bolder;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.FolderContents {
+  margin-left: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.FolderName:hover {
+  cursor: pointer;
+  background-color: rgb(243, 243, 255);
+}
+
+.SelectedFolder {
+  background-color: rgb(220, 220, 255);
+  border-radius: 5px;
+}
+
+.SelectedFolder:hover {
+  background-color: rgb(220, 220, 255);
+}
+
+.FolderLabel {
+  margin-left: 3px;
+  padding: 0 5px;
+}
+
+.Folder:hover {
+}

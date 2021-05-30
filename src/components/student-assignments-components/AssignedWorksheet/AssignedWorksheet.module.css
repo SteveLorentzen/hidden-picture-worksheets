@@ -1,0 +1,41 @@
+.AssignedWorksheet {
+  border: 3px solid black;
+  width: 25%;
+  min-width: 275px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-around;
+  padding: 0 10px 10px 10px;
+  margin: 10px 20px 10px 20px;
+}
+
+.AssignedWorksheet:hover {
+  cursor: pointer;
+  background-color: rgb(255, 243, 241);
+  transform: scale(1.05);
+}
+
+.Completed {
+  background-color: rgb(201, 253, 201);
+}
+
+.CompletedTag {
+  color: tomato;
+  font-weight: bolder;
+  margin-left: 10px;
+}
+
+.CompletedCheckmark {
+  color: tomato;
+}
+
+.WorksheetTitle {
+}
+
+.WorksheetDueDate {
+}
+
+.WorksheetProgress {
+}

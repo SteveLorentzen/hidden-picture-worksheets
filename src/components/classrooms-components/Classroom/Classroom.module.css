@@ -1,0 +1,81 @@
+.Classroom {
+  display: flex;
+  width: 75%;
+  margin: auto;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.InviteOptions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.Instructions {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: space-between;
+}
+
+.ClassroomName {
+  color: tomato;
+}
+
+.EmailInvite {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.EmailInviteInput {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  align-items: center;
+}
+
+.SendMessage {
+  display: flex;
+  flex-wrap: wrap;
+  width: 30%;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin-right: 10px;
+  min-width: 210px;
+}
+
+.EnterInstructions {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 50%;
+  min-width: 350px;
+  margin-left: 10px;
+  border: 1px solid black;
+  padding: 3px;
+  box-shadow: 5px 2px 2px 1px #888888;
+}
+
+.Enter {
+  width: 50%;
+}
+
+.Url {
+  color: tomato;
+}
+
+.Code {
+  color: tomato;
+  margin: 0 0 0 10px;
+}
+.Accent {
+  color: tomato;
+  font-weight: 700;
+}

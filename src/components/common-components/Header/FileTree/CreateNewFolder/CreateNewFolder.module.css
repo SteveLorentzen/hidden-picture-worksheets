@@ -1,0 +1,43 @@
+.NewFolder {
+  display: flex;
+  border-top: 1px solid black;
+  padding: 5px;
+  background-color: rgb(255, 222, 217);
+  border-bottom: 1px solid black;
+}
+
+.NewFolder:hover {
+  cursor: pointer;
+  background-color: rgb(252, 197, 189);
+}
+
+.NewFolderBox {
+  border: 1px solid black;
+  padding: 15px;
+}
+
+.NewFolderInput {
+  margin-bottom: 10px;
+}
+
+.Active {
+  background-color: tomato;
+}
+
+.Active:hover {
+  background-color: tomato;
+}
+
+.ButtonBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ArrowUp {
+  align-self: flex-end;
+}
+
+.NewFolderIcon {
+  margin-right: 5px;
+}
