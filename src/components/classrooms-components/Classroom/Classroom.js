@@ -21,7 +21,8 @@ const Classroom = ({ classroomName, classroomCode, classroomId }) => {
       try {
         const token = await getAccessTokenSilently();
         const result = await fetch(
-          "http://localhost:8080/get-students/" + classroomId,
+          "https://hidden-picture-worksheets-api.herokuapp.com/get-students/" +
+            classroomId,
           {
             headers: {
               Authorization: "bearer " + token,
@@ -44,7 +45,7 @@ const Classroom = ({ classroomName, classroomCode, classroomId }) => {
   //   const inviteHandler = async () => {
   //     try {
   //       const token = await getAccessTokenSilently();
-  //       const result = await fetch("http://localhost:8080/join-classroom", {
+  //       const result = await fetch("https://hidden-picture-worksheets-api.herokuapp.com/join-classroom", {
   //         method: "POST",
   //         body: formData,
   //         headers: {
@@ -62,17 +63,20 @@ const Classroom = ({ classroomName, classroomCode, classroomId }) => {
     setIsLoading(true);
     try {
       const token = await getAccessTokenSilently();
-      const result = await fetch("http://localhost:8080/delete-student", {
-        method: "DELETE",
-        headers: {
-          Authorization: "bearer " + token,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id,
-          classroomId,
-        }),
-      });
+      const result = await fetch(
+        "https://hidden-picture-worksheets-api.herokuapp.com/delete-student",
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: "bearer " + token,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id,
+            classroomId,
+          }),
+        }
+      );
       const resData = await result.json();
       setDeleteTracker(!deleteTracker);
       setIsLoading(false);

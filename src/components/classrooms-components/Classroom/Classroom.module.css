@@ -1,6 +1,8 @@
 .Classroom {
   display: flex;
   width: 75%;
+  max-width: 56rem;
+  padding: 3rem;
   margin: auto;
   flex-direction: column;
   justify-content: center;
@@ -15,10 +17,10 @@
 }
 
 .Instructions {
-  margin-top: 20px;
+  margin-top: 3rem;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
   align-items: space-between;
 }
 
@@ -56,10 +58,10 @@
   justify-content: flex-start;
   align-items: center;
   width: 50%;
-  min-width: 350px;
+  min-width: 22px;
   margin-left: 10px;
   border: 1px solid black;
-  padding: 3px;
+  padding: 1rem 2rem;
   box-shadow: 5px 2px 2px 1px #888888;
 }
 
