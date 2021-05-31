@@ -35,11 +35,13 @@ const NewWorksheet = ({
     }
     setTimedMessage({ message: startingMessage, showing: true });
     console.log("updating/creating worksheet");
-    let url = "http://localhost:8080/worksheet";
+    let url = "https://hidden-picture-worksheets-api.herokuapp.com/worksheet";
     let method = "POST";
     if (activeWorksheet) {
       method = "PUT";
-      url = "http://localhost:8080/worksheet/" + activeWorksheet.worksheetId;
+      url =
+        "https://hidden-picture-worksheets-api.herokuapp.com/worksheet/" +
+        activeWorksheet.worksheetId;
     }
     const formData = new FormData();
     formData.append("worksheetName", worksheetName);

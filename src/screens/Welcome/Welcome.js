@@ -1,11 +1,11 @@
 import React from "react";
 import Header from "../../components/common-components/Header/Header";
-import {Box, Heading, List, ListItem, Button, Image} from "@chakra-ui/core";
-import {useAuth0} from "@auth0/auth0-react";
+import { Box, Heading, List, ListItem, Button, Image } from "@chakra-ui/core";
+import { useAuth0 } from "@auth0/auth0-react";
 import hiddenPictureDemo from "../../assets/hidden-picture-demo.png";
 
 const Welcome = () => {
-  const {loginWithRedirect} = useAuth0();
+  const { loginWithRedirect } = useAuth0();
   return (
     <>
       <Header isHeaderForWelcomePage={true} />
@@ -20,11 +20,11 @@ const Welcome = () => {
         <Heading
           as="h3"
           size="xl"
-          margin="30px auto"
+          margin="3rem auto"
           minWidth="250px"
           maxWidth="600px"
         >
-          A <strong style={{color: "tomato"}}>free</strong> resource where
+          A <strong style={{ color: "tomato" }}>free</strong> resource where
           teachers can make fun worksheets!
         </Heading>
         <Box width="60%" minWidth="625px" margin="0 0 20px 0">
@@ -40,7 +40,7 @@ const Welcome = () => {
             flexDirection="column"
           >
             <Heading
-              style={{color: "teal"}}
+              style={{ color: "teal" }}
               color="teal"
               as="h4"
               size="md"

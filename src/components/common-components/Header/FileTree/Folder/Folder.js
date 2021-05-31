@@ -70,10 +70,13 @@ const Folder = ({
     }
 
     try {
-      const result = await axios.put("http://localhost:8080/add-to-folder", {
-        movedItem: moved,
-        targetFolder: id,
-      });
+      const result = await axios.put(
+        "https://hidden-picture-worksheets-api.herokuapp.com/add-to-folder",
+        {
+          movedItem: moved,
+          targetFolder: id,
+        }
+      );
 
       if (moved.type === "folder") {
         const updatedFolders = folders.map((folder) => {

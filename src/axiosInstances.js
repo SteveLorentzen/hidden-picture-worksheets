@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const newWorksheetAxiosInstance = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: "https://hidden-picture-worksheets-api.herokuapp.com",
 });
 
 // newWorksheetAxiosInstance.defaults.headers.post["Content-Type"] =

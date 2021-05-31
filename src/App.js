@@ -24,7 +24,8 @@ function App() {
 
   const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();
 
-  axios.defaults.baseURL = "http://localhost:8080";
+  axios.defaults.baseURL =
+    "https://hidden-picture-worksheets-api.herokuapp.com/";
   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   axios.defaults.headers.common["userId"] = userId;
 
@@ -45,16 +46,19 @@ function App() {
         const token = await getAccessTokenSilently();
         setToken(token);
 
-        const result = await fetch("http://localhost:8080/auth/create-user", {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            classroomToJoin: classroomCode,
-          }),
-        });
+        const result = await fetch(
+          "https://hidden-picture-worksheets-api.herokuapp.com/auth/create-user",
+          {
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              classroomToJoin: classroomCode,
+            }),
+          }
+        );
         const resData = await result.json();
         console.log(resData);
         // setClassroomCode(resData.classroomCode);

@@ -17,12 +17,15 @@ const CreateNewFolder = ({ selectedFolder, folders, setFolders }) => {
   const createFolderHandler = async () => {
     console.log("clicked");
     try {
-      const result = await axios.post("http://localhost:8080/new-folder", {
-        data: {
-          folderName: folderInput,
-          parent: selectedFolder.id,
-        },
-      });
+      const result = await axios.post(
+        "https://hidden-picture-worksheets-api.herokuapp.com/new-folder",
+        {
+          data: {
+            folderName: folderInput,
+            parent: selectedFolder.id,
+          },
+        }
+      );
       console.log(result);
       const updatedFolders = [...folders];
       updatedFolders.push(result.data.folder);

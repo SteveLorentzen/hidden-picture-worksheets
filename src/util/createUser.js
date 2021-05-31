@@ -6,7 +6,7 @@
 //   try {
 //     const token = await getAccessTokenSilently();
 
-//     const result = await fetch("http://localhost:8080/auth/create-user", {
+//     const result = await fetch("https://hidden-picture-worksheets-api.herokuapp.com/auth/create-user", {
 //       method: "post",
 //       headers: {
 //         Authorization: `Bearer ${token}`,
