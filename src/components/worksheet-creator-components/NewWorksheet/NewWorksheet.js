@@ -1,6 +1,6 @@
 import classes from "./NewWorksheet.module.css";
-import React, { useState, useEffect } from "react";
-import { Box, Heading, Input, Select, Button } from "@chakra-ui/core";
+import React, {useState, useEffect} from "react";
+import {Box, Heading, Input, Select, Button} from "@chakra-ui/core";
 import Tag from "./Tag/Tag";
 import axios from "axios";
 
@@ -33,15 +33,13 @@ const NewWorksheet = ({
     if (activeWorksheet) {
       startingMessage = "Applying changes...";
     }
-    setTimedMessage({ message: startingMessage, showing: true });
+    setTimedMessage({message: startingMessage, showing: true});
     console.log("updating/creating worksheet");
-    let url = "https://hidden-picture-worksheets-api.herokuapp.com/worksheet";
+    let url = `${axios.defaults.baseURL}/worksheet`;
     let method = "POST";
     if (activeWorksheet) {
       method = "PUT";
-      url =
-        "https://hidden-picture-worksheets-api.herokuapp.com/worksheet/" +
-        activeWorksheet.worksheetId;
+      url = `${axios.defaults.baseURL}/worksheet/${activeWorksheet.worksheetId}`;
     }
     const formData = new FormData();
     formData.append("worksheetName", worksheetName);
@@ -66,8 +64,8 @@ const NewWorksheet = ({
       if (activeWorksheet) {
         message = "Changes saved :)";
       }
-      setTimedMessage({ message, showing: true });
-      setTimeout(() => setTimedMessage({ message: "", showing: false }), 1500);
+      setTimedMessage({message, showing: true});
+      setTimeout(() => setTimedMessage({message: "", showing: false}), 1500);
       // openWorksheetHandler(resData.worksheet._id);
     } catch (err) {
       console.log(err);
@@ -75,12 +73,12 @@ const NewWorksheet = ({
   };
 
   const addTagHandler = () => {
-    setTags({ ...tags, [tagInput]: "tag" });
+    setTags({...tags, [tagInput]: "tag"});
     setTagInput("");
   };
 
   const deleteTagHandler = (tagName) => {
-    const updatedTags = { ...tags };
+    const updatedTags = {...tags};
     delete updatedTags[tagName];
     setTags(updatedTags);
   };
@@ -208,7 +206,7 @@ const NewWorksheet = ({
             onChange={(event) => setMainImageUrl(event.target.value)}
           />
         </div>
-        <h4 style={{ fontWeight: "bolder", margin: "10px auto" }}>Or</h4>
+        <h4 style={{fontWeight: "bolder", margin: "10px auto"}}>Or</h4>
         <div className={classes.InputContainer}>
           <Input
             variant="flushed"

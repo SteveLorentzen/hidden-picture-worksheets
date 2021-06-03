@@ -1,11 +1,11 @@
-import React, { useEffect, useState, createContext } from "react";
+import React, {useEffect, useState, createContext} from "react";
 import "./App.css";
-import { Route, Switch } from "react-router-dom";
+import {Route, Switch} from "react-router-dom";
 import Welcome from "./screens/Welcome/Welcome";
 import WorksheetCreator from "./screens/WorksheetCreator/WorksheetCreator";
 // import Classroom from "./components/classrooms-components/Classroom/Classroom";
 import JoinClassroom from "./screens/JoinClassroom/JoinClassroom";
-import { useAuth0 } from "@auth0/auth0-react";
+import {useAuth0} from "@auth0/auth0-react";
 import Classrooms from "./screens/Classrooms/Classrooms";
 import AcceptWorksheet from "./components/AcceptWorksheet/AcceptWorksheet";
 import Assignments from "./screens/Assignments/Assignments";
@@ -22,16 +22,16 @@ function App() {
 
   const [userId, setUserId] = useState("");
 
-  const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();
+  const {isAuthenticated, getAccessTokenSilently, user} = useAuth0();
 
-  axios.defaults.baseURL =
-    "https://hidden-picture-worksheets-api.herokuapp.com/";
+  axios.defaults.baseURL = "http://localhost:8080";
   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   axios.defaults.headers.common["userId"] = userId;
 
   let isTeacher = false;
 
   if (user) {
+    console.log(user);
     isTeacher = user["https://hiddenpicturetest.com/roles"].includes("teacher");
   }
 
@@ -46,23 +46,15 @@ function App() {
         const token = await getAccessTokenSilently();
         setToken(token);
 
-        const result = await fetch(
-          "https://hidden-picture-worksheets-api.herokuapp.com/auth/create-user",
-          {
-            method: "post",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              classroomToJoin: classroomCode,
-            }),
-          }
-        );
-        const resData = await result.json();
-        console.log(resData);
+        const result = await axios.post("/auth/create-user", {
+          data: {
+            classroomToJoin: classroomCode,
+          },
+        });
+        // const resData = await result.json();
+        console.log(result.data);
         // setClassroomCode(resData.classroomCode);
-        setUserId(resData.userId);
+        setUserId(result.data.userId);
       } catch (err) {
         console.log(err);
       }
@@ -72,7 +64,7 @@ function App() {
 
   return (
     <>
-      <AuthContext.Provider value={{ token, userId }}>
+      <AuthContext.Provider value={{token, userId}}>
         {isAuthenticated && isTeacher && token && userId ? (
           <Switch>
             <Route path="/" exact component={WorksheetCreator} />

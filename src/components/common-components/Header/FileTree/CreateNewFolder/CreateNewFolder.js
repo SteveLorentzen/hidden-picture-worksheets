@@ -1,15 +1,11 @@
 import * as React from "react";
 import classes from "./CreateNewFolder.module.css";
-import { IconContext } from "react-icons";
-import {
-  IoIosAddCircle,
-  IoIosRemoveCircle,
-  IoIosArrowUp,
-} from "react-icons/io";
-import { Box, Input, Button } from "@chakra-ui/core";
+import {IconContext} from "react-icons";
+import {IoIosAddCircle, IoIosRemoveCircle, IoIosArrowUp} from "react-icons/io";
+import {Box, Input, Button} from "@chakra-ui/core";
 import axios from "axios";
 
-const CreateNewFolder = ({ selectedFolder, folders, setFolders }) => {
+const CreateNewFolder = ({selectedFolder, folders, setFolders}) => {
   const [folderInput, setFolderInput] = React.useState("");
 
   const [newFolderIsOpen, setNewFolderIsOpen] = React.useState(false);
@@ -17,15 +13,12 @@ const CreateNewFolder = ({ selectedFolder, folders, setFolders }) => {
   const createFolderHandler = async () => {
     console.log("clicked");
     try {
-      const result = await axios.post(
-        "https://hidden-picture-worksheets-api.herokuapp.com/new-folder",
-        {
-          data: {
-            folderName: folderInput,
-            parent: selectedFolder.id,
-          },
-        }
-      );
+      const result = await axios.post("/new-folder", {
+        data: {
+          folderName: folderInput,
+          parent: selectedFolder.id,
+        },
+      });
       console.log(result);
       const updatedFolders = [...folders];
       updatedFolders.push(result.data.folder);
@@ -46,7 +39,7 @@ const CreateNewFolder = ({ selectedFolder, folders, setFolders }) => {
         onClick={() => setNewFolderIsOpen(!newFolderIsOpen)}
         className={newFolderClasses}
       >
-        <IconContext.Provider value={{ size: "1.5rem" }}>
+        <IconContext.Provider value={{size: "1.5rem"}}>
           {!newFolderIsOpen ? (
             <IoIosAddCircle className={classes.NewFolderIcon} />
           ) : (

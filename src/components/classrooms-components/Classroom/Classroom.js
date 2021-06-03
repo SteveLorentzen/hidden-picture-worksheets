@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
-import { Heading, Box, Spinner } from "@chakra-ui/core";
+import React, {useState, useEffect} from "react";
+import {useAuth0} from "@auth0/auth0-react";
+import {Heading, Box, Spinner} from "@chakra-ui/core";
 import Student from "../Student/Student";
 import classes from "./Classroom.module.css";
+import axios from "axios";
 
-const Classroom = ({ classroomName, classroomCode, classroomId }) => {
+const Classroom = ({classroomName, classroomCode, classroomId}) => {
   //   const [studentEmail, setStudentEmail] = useState("");
 
   const [students, setStudents] = useState([]);
@@ -13,22 +14,14 @@ const Classroom = ({ classroomName, classroomCode, classroomId }) => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const { getAccessTokenSilently } = useAuth0();
+  const {getAccessTokenSilently} = useAuth0();
 
   useEffect(() => {
     setIsLoading(true);
     const getStudents = async () => {
       try {
         const token = await getAccessTokenSilently();
-        const result = await fetch(
-          "https://hidden-picture-worksheets-api.herokuapp.com/get-students/" +
-            classroomId,
-          {
-            headers: {
-              Authorization: "bearer " + token,
-            },
-          }
-        );
+        const result = await axios.get("/get-students/" + classroomId);
         const resData = await result.json();
         setStudents(resData.students);
         setIsLoading(false);
@@ -63,20 +56,12 @@ const Classroom = ({ classroomName, classroomCode, classroomId }) => {
     setIsLoading(true);
     try {
       const token = await getAccessTokenSilently();
-      const result = await fetch(
-        "https://hidden-picture-worksheets-api.herokuapp.com/delete-student",
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: "bearer " + token,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id,
-            classroomId,
-          }),
-        }
-      );
+      const result = await axios.delete("/delete-student", {
+        data: {
+          id,
+          classroomId,
+        },
+      });
       const resData = await result.json();
       setDeleteTracker(!deleteTracker);
       setIsLoading(false);
