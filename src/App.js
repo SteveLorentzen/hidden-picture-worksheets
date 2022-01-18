@@ -1,16 +1,17 @@
-import React, { useEffect, useState, createContext } from "react";
+import React, {useEffect, useState, createContext} from "react";
 import "./App.css";
-import { Route, Switch } from "react-router-dom";
+import {Route, Switch} from "react-router-dom";
 import Welcome from "./screens/Welcome/Welcome";
 import WorksheetCreator from "./screens/WorksheetCreator/WorksheetCreator";
 // import Classroom from "./components/classrooms-components/Classroom/Classroom";
 import JoinClassroom from "./screens/JoinClassroom/JoinClassroom";
-import { useAuth0 } from "@auth0/auth0-react";
+import {useAuth0} from "@auth0/auth0-react";
 import Classrooms from "./screens/Classrooms/Classrooms";
 import AcceptWorksheet from "./components/AcceptWorksheet/AcceptWorksheet";
 import Assignments from "./screens/Assignments/Assignments";
 import StudentAssignments from "./screens/StudentAssignments/StudentAssignments";
 import StudentWorksheet from "./screens/StudentWorksheet/StudentWorksheet";
+import TeacherOrStudent from "./screens/TeacherOrStudent/TeacherOrStudent";
 import axios from "axios";
 
 export const AuthContext = createContext();
@@ -22,7 +23,7 @@ function App() {
 
   const [userId, setUserId] = useState("");
 
-  const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();
+  const {isAuthenticated, getAccessTokenSilently, user} = useAuth0();
 
   axios.defaults.baseURL =
     "https://hidden-picture-worksheets-api.herokuapp.com/";
@@ -72,7 +73,7 @@ function App() {
 
   return (
     <>
-      <AuthContext.Provider value={{ token, userId }}>
+      <AuthContext.Provider value={{token, userId}}>
         {isAuthenticated && isTeacher && token && userId ? (
           <Switch>
             <Route path="/" exact component={WorksheetCreator} />
@@ -99,6 +100,7 @@ function App() {
               render={(props) => <Classroom classroomCode={classroomCode} />}
             /> */}
             <Route path="/join" component={JoinClassroom} />
+            <Route path="/teacher-or-student" component={TeacherOrStudent} />
             <Route
               path="/accept-worksheet/:worksheetId"
               component={AcceptWorksheet}

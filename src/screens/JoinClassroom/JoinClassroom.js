@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import classes from "./JoinClassroom.module.css";
-import { useAuth0 } from "@auth0/auth0-react";
+import {useAuth0} from "@auth0/auth0-react";
 import Header from "../../components/common-components/Header/Header";
-import { Button, Input, Box } from "@chakra-ui/core";
+import {Button, Input, Box} from "@chakra-ui/core";
 import axios from "axios";
 
 const JoinClassroom = () => {
   const [classroomCode, setClassroomCode] = useState("");
 
-  const { loginWithRedirect } = useAuth0();
+  const {loginWithRedirect} = useAuth0();
 
   const checkClassroomCode = async (code) => {
     try {
@@ -27,10 +27,13 @@ const JoinClassroom = () => {
   };
 
   const loginWithCodeHandler = async (code) => {
+    console.log("this ran");
     try {
       const validCode = await checkClassroomCode(code);
       if (validCode) {
-        loginWithRedirect();
+        loginWithRedirect({
+          myLittleTest: "A test!",
+        });
       }
     } catch (err) {
       console.log(err);
