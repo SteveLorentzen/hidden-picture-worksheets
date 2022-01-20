@@ -1,7 +1,6 @@
 import classes from "./NewWorksheet.module.css";
-import React, { useState, useEffect } from "react";
-import { Box, Heading, Input, Select, Button } from "@chakra-ui/core";
-import Tag from "./Tag/Tag";
+import React, {useState, useEffect} from "react";
+import {Box, Heading, Input, Select, Button} from "@chakra-ui/core";
 import axios from "axios";
 
 const NewWorksheet = ({
@@ -17,8 +16,6 @@ const NewWorksheet = ({
   const [mainImageUrl, setMainImageUrl] = useState("");
   const [panelImageUrl, setPanelImageUrl] = useState("");
   const [mainImage, setMainImage] = useState([]);
-  const [tagInput, setTagInput] = useState("");
-  const [tags, setTags] = useState({});
 
   useEffect(() => {
     if (activeWorksheet) {
@@ -33,7 +30,7 @@ const NewWorksheet = ({
     if (activeWorksheet) {
       startingMessage = "Applying changes...";
     }
-    setTimedMessage({ message: startingMessage, showing: true });
+    setTimedMessage({message: startingMessage, showing: true});
     console.log("updating/creating worksheet");
     let url = "https://hidden-picture-worksheets-api.herokuapp.com/worksheet";
     let method = "POST";
@@ -66,23 +63,12 @@ const NewWorksheet = ({
       if (activeWorksheet) {
         message = "Changes saved :)";
       }
-      setTimedMessage({ message, showing: true });
-      setTimeout(() => setTimedMessage({ message: "", showing: false }), 1500);
+      setTimedMessage({message, showing: true});
+      setTimeout(() => setTimedMessage({message: "", showing: false}), 1500);
       // openWorksheetHandler(resData.worksheet._id);
     } catch (err) {
       console.log(err);
     }
-  };
-
-  const addTagHandler = () => {
-    setTags({ ...tags, [tagInput]: "tag" });
-    setTagInput("");
-  };
-
-  const deleteTagHandler = (tagName) => {
-    const updatedTags = { ...tags };
-    delete updatedTags[tagName];
-    setTags(updatedTags);
   };
 
   let mainImageUrlInputIsDisabled = false;
@@ -208,7 +194,7 @@ const NewWorksheet = ({
             onChange={(event) => setMainImageUrl(event.target.value)}
           />
         </div>
-        <h4 style={{ fontWeight: "bolder", margin: "10px auto" }}>Or</h4>
+        <h4 style={{fontWeight: "bolder", margin: "10px auto"}}>Or</h4>
         <div className={classes.InputContainer}>
           <Input
             variant="flushed"

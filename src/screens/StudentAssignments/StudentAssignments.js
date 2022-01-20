@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import classes from "./StudentAssignments.module.css";
-import { Link, useHistory } from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import StudentHeader from "../../components/common-components/StudentHeader/StudentHeader";
 import AssignedWorksheet from "../../components/student-assignments-components/AssignedWorksheet/AssignedWorksheet";
-import { Spinner, Box, Heading, Button } from "@chakra-ui/core";
+import {Spinner, Box, Heading, Button} from "@chakra-ui/core";
 import axios from "axios";
 import Modal from "../../components/UI/Modal/Modal";
 
@@ -43,7 +43,7 @@ const StudentAssignments = () => {
       <StudentHeader />
       <Box className={classes.GreetingBox}>
         <Heading as="h1" size="xl">
-          Welcome <strong style={{ color: "tomato" }}>Students</strong>!
+          Welcome <strong style={{color: "tomato"}}>Student</strong>!
         </Heading>
         <Heading as="h2" size="lg">
           Select a worksheet:

@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import Header from "../../components/common-components/Header/Header";
-import { Box, Heading, Button, Spinner } from "@chakra-ui/core";
+import {Box, Heading, Button, Spinner} from "@chakra-ui/core";
 import classes from "./Assignments.module.css";
 import Modal from "../../components/UI/Modal/Modal";
 import NewAssignment from "../../components/assignments-components/NewAssignment/NewAssignment";
 import Assignment from "../../components/assignments-components/Assignment/Assignment";
-import { timedStatusMessage } from "../../util/timedStatusMessage";
+import {timedStatusMessage} from "../../util/timedStatusMessage";
 import axios from "axios";
 import AssignmentReport from "./AssignmentReport/AssignmentReport";
-import { assign } from "lodash";
 
 const Assignments = () => {
   const [assignments, setAssignments] = useState([
@@ -58,7 +57,7 @@ const Assignments = () => {
   };
 
   const deleteAssignmentHandler = async (event, assignmentId) => {
-    setStatus({ ...status, message: "Deleting assignment...", spinner: true });
+    setStatus({...status, message: "Deleting assignment...", spinner: true});
     event.stopPropagation();
     console.log("deleting");
     try {
@@ -87,7 +86,7 @@ const Assignments = () => {
       message: "Creating new assignment...",
       spinner: true,
     });
-    setModalIsOpen({ ...modalIsOpen, newAssignment: false });
+    setModalIsOpen({...modalIsOpen, newAssignment: false});
     try {
       const result = await axios.post("/create-assignment", {
         assignmentName: newAssignmentInput.assignmentName,
@@ -144,7 +143,7 @@ const Assignments = () => {
       {modalIsOpen.newAssignment ? (
         <Modal
           closeModalHandler={() =>
-            setModalIsOpen({ ...modalIsOpen, newAssignment: false })
+            setModalIsOpen({...modalIsOpen, newAssignment: false})
           }
         >
           <NewAssignment
@@ -165,9 +164,7 @@ const Assignments = () => {
         <Button
           className={classes.AssignmentButton}
           placeholder="New Assignment"
-          onClick={() =>
-            setModalIsOpen({ ...modalIsOpen, newAssignment: true })
-          }
+          onClick={() => setModalIsOpen({...modalIsOpen, newAssignment: true})}
         >
           New Assignment
         </Button>
@@ -249,14 +246,14 @@ const Assignments = () => {
       {selectedAssignment.assignmentName ? (
         <Modal
           closeModalHandler={() =>
-            setSelectedAssignment({ assignmentName: "", scores: [] })
+            setSelectedAssignment({assignmentName: "", scores: []})
           }
         >
           <AssignmentReport
             scores={selectedAssignment.scores}
             assignmentName={selectedAssignment.assignmentName}
             closeModalHandler={() =>
-              setSelectedAssignment({ assignmentName: "", scores: [] })
+              setSelectedAssignment({assignmentName: "", scores: []})
             }
           />
         </Modal>
