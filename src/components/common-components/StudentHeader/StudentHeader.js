@@ -1,14 +1,14 @@
 import React from "react";
-import { Box, Heading, Image, Button } from "@chakra-ui/core";
-import { Link, NavLink } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
-import { IoIosArrowBack } from "react-icons/io";
+import {Box, Heading, Image} from "@chakra-ui/core";
+import {Link, NavLink} from "react-router-dom";
+import {useAuth0} from "@auth0/auth0-react";
+import {IoIosArrowBack} from "react-icons/io";
 import classes from "./StudentHeader.module.css";
 import Login from "../../Auth/Login/Login";
-import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/core";
+import {Menu, MenuButton, MenuList, MenuItem} from "@chakra-ui/core";
 
-const StudentHeader = ({ isHeaderForStudentWorksheet }) => {
-  const { isAuthenticated, user, logout } = useAuth0();
+const StudentHeader = ({isHeaderForStudentWorksheet}) => {
+  const {isAuthenticated, user, logout} = useAuth0();
 
   return (
     <Box padding="10px" w="100%" bg="tomato" className={classes.Header}>
@@ -28,12 +28,6 @@ const StudentHeader = ({ isHeaderForStudentWorksheet }) => {
               alignItems: "center",
             }}
           >
-            {/* {isHeaderForStudentWorksheet ? (
-              <Button variant="outline" display="flex">
-                <IoIosArrowBack />
-                <NavLink to="/">Back to Assignments</NavLink>
-              </Button>
-            ) : null} */}
             <div>
               <Link to="/">
                 <Heading as="h2" size="md" color="white">
@@ -47,7 +41,7 @@ const StudentHeader = ({ isHeaderForStudentWorksheet }) => {
             className={classes.Nav}
             style={
               isHeaderForStudentWorksheet
-                ? { justifyContent: "space-between" }
+                ? {justifyContent: "space-between"}
                 : {}
             }
           >

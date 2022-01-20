@@ -5,7 +5,6 @@ import {Box, Heading, Button, Input} from "@chakra-ui/core";
 import {format} from "date-fns";
 import {AiFillEdit} from "react-icons/ai";
 import {IconContext} from "react-icons/";
-import Path from "../../common-components/Header/FileTree/Path/Path";
 
 const Assignment = ({
   assignmentName,
@@ -22,7 +21,7 @@ const Assignment = ({
   assignments,
   setAssignments,
 }) => {
-  const [studentDataIsShowing, setStudentDataIsShowing] = useState(false);
+  // const [studentDataIsShowing, setStudentDataIsShowing] = useState(false);
 
   const [editingAssignmentName, setEditingAssignmentName] = useState(false);
 
@@ -32,9 +31,9 @@ const Assignment = ({
     setAssignmentNameInput(assignmentName);
   }, [assignmentName]);
 
-  const openAssignmentHandler = () => {
-    setStudentDataIsShowing(!studentDataIsShowing);
-  };
+  // const openAssignmentHandler = () => {
+  //   setStudentDataIsShowing(!studentDataIsShowing);
+  // };
 
   const editingHandler = (event) => {
     event.stopPropagation();

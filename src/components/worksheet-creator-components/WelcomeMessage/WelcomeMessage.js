@@ -1,7 +1,6 @@
 import * as React from "react";
 import classes from "./WelcomeMessage.module.css";
-import { Box, Heading } from "@chakra-ui/core";
-import WorksheetTree from "../../assignments-components/NewAssignment/WorksheetTree/WorksheetTree";
+import {Box, Heading} from "@chakra-ui/core";
 
 const WelcomeMessage = () => {
   React.useEffect(() => {
