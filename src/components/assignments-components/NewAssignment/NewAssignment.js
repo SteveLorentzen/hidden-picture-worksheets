@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { Box, Input, Heading, Button, Select } from "@chakra-ui/core";
+import React, {useState, useEffect} from "react";
+import {Box, Input, Heading, Button, Select} from "@chakra-ui/core";
 import classes from "./NewAssignment.module.css";
 import axios from "axios";
 import WorksheetTree from "./WorksheetTree/WorksheetTree";
 
-const NewAssignment = ({ closeModalHandler, newAssignmentHandler }) => {
+const NewAssignment = ({closeModalHandler, newAssignmentHandler}) => {
   const [newAssignmentInput, setNewAssignmentInput] = useState({
     assignmentName: "",
     worksheet: "",
@@ -81,20 +81,6 @@ const NewAssignment = ({ closeModalHandler, newAssignmentHandler }) => {
               selectedWorksheet={selectedWorksheet}
               setSelectedWorksheet={setSelectedWorksheet}
             />
-            {/* <label htmlFor="worksheet">Worksheet</label>
-          <Select
-            name="worksheet"
-            placeholder="select a worksheet"
-            onChange={inputHandler}
-          >
-            {worksheets.map((worksheet) => {
-              return (
-                <option key={worksheet._id} value={worksheet._id}>
-                  {worksheet.worksheetName}
-                </option>
-              );
-            })}
-          </Select> */}
           </Box>
         </Box>
 

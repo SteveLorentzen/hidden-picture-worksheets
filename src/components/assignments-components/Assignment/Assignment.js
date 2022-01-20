@@ -14,15 +14,11 @@ const Assignment = ({
   dueDate,
   classroomName,
   questionNumber,
-  // scores,
   deleteAssignmentHandler,
   selectAssignmentHandler,
-  // isSelected,
   assignments,
   setAssignments,
 }) => {
-  // const [studentDataIsShowing, setStudentDataIsShowing] = useState(false);
-
   const [editingAssignmentName, setEditingAssignmentName] = useState(false);
 
   const [assignmentNameInput, setAssignmentNameInput] = useState("");
@@ -30,10 +26,6 @@ const Assignment = ({
   useEffect(() => {
     setAssignmentNameInput(assignmentName);
   }, [assignmentName]);
-
-  // const openAssignmentHandler = () => {
-  //   setStudentDataIsShowing(!studentDataIsShowing);
-  // };
 
   const editingHandler = (event) => {
     event.stopPropagation();
@@ -62,14 +54,6 @@ const Assignment = ({
   const preventHandler = (event) => {
     event.stopPropagation();
   };
-
-  // let assignmentClasses = classes.AssignmentOuterBox;
-
-  // if (isSelected) {
-  //   assignmentClasses = [classes.AssignmentOuterBox, classes.Selected].join(
-  //     " "
-  //   );
-  // }
 
   return (
     <Box
@@ -124,8 +108,6 @@ const Assignment = ({
             </Heading>
             <Heading as="h2" size="md">
               {classroomName}
-              {/* ({scores.length}{" "}
-          {scores.length === 1 ? "student" : "students"}) */}
             </Heading>
           </Box>
         </Box>
@@ -157,37 +139,6 @@ const Assignment = ({
           </Button>
         </Box>
       </Box>
-      {/* {isSelected ? (
-        <Box>
-          <Heading as="h2" size="lg">
-            Student Progress
-          </Heading>
-          <Box className={classes.StudentProgressBox}>
-            {scores.map((score) => {
-              let correctCount = 0;
-
-              Object.keys(score.questionAnswers).forEach((key) => {
-                if (
-                  score.questionAnswers[key].answer ===
-                  score.questionAnswers[key].answerKey
-                ) {
-                  correctCount++;
-                }
-              });
-
-              return (
-                <div key={score.student._id} className={classes.Report}>
-                  {score.student.name}{" "}
-                  <strong>
-                    {Math.round((correctCount / score.questionNumber) * 100)}%
-                    done
-                  </strong>
-                </div>
-              );
-            })}
-          </Box>
-        </Box>
-      ) : null} */}
     </Box>
   );
 };

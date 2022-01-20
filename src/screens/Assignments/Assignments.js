@@ -88,11 +88,12 @@ const Assignments = () => {
     });
     setModalIsOpen({...modalIsOpen, newAssignment: false});
     try {
+      console.log(new Date(newAssignmentInput.dueDate).toISOString());
       const result = await axios.post("/create-assignment", {
         assignmentName: newAssignmentInput.assignmentName,
         worksheet: newAssignmentInput.worksheet,
         classroomAssigned: newAssignmentInput.classroomAssigned,
-        dueDate: newAssignmentInput.dueDate,
+        dueDate: new Date(newAssignmentInput.dueDate).toISOString(),
       });
       console.log(result);
       if (result.data.assignment) {
